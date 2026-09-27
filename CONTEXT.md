@@ -7,12 +7,12 @@ and send back `output/matching_results.tsv` (and `output/candidate_pairs.tsv`)**
 
 ## 1. Quick start (for the human)
 
-1. Install Python 3.10–3.12, then in a terminal:
+1. Install Python 3.11 or 3.12, then in a terminal (from the repo root):
    ```
-   pip install rapidfuzz lightgbm pyarrow pandas numpy scikit-learn psutil transformers
+   pip install -r requirements.txt
    # NVIDIA GPU (optional, enables the cross-encoder step, better score):
    pip install torch --index-url https://download.pytorch.org/whl/cu121
-   # no GPU:  pip install torch
+   # (requirements.txt already installs a CPU torch; the line above swaps in the GPU build)
    ```
 2. Get the dataset (NOT in this repo, 2.5 GB). You need a folder laid out as:
    ```
