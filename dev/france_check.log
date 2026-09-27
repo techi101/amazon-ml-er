@@ -1,0 +1,127 @@
+﻿DATA_DIR = C:\Users\Lenovo\Projects\amazon_er\dev\real_subset
+[      5s] transliteration dictionary: 156 entries from 21953 native-script pairs | RAM 0.3 GB
+[('limirrad', 'limited'), ('praivarr', 'private'), ('elelpi', 'llp'), ('tek', 'tech'), ('inrarnaashanal', 'international'), ('enrarpraisas', 'enterprises'), ('venchels', 'ventures'), ('indastriis', 'industries'), ('kanstrakshan', 'construction'), ('teknolaji', 'technology'), ('prodakts', 'products'), ('sarviisas', 'services'), ('inphr', 'infra'), ('kansalttanrs', 'consultants'), ('pavar', 'power'), ('inphraastrakchar', 'infrastructure'), ('helttkeyar', 'healthcare'), ('phinaans', 'finance'), ('bildels', 'builders'), ('inpeks', 'impex'), ('maarkkarring', 'marketing'), ('phaunteshan', 'foundation'), ('kansaltting', 'consulting'), ('hospirraalirri', 'hospitality'), ('treding', 'trading')]
+[      8s] half A 35,000, half B 35,000, validation 30,000 S1 records | RAM 0.5 GB
+[     33s]   US: cleaned 85,649 S1 + 386,076 S2/S3 | RAM 1.0 GB
+[     54s]   US: 3,330,435 raw candidate pairs | RAM 1.1 GB
+[     72s]   US: 2,127,738 pairs after pruning (24.8 per S1) | RAM 1.5 GB
+[    107s]   US: 2,117,030 feature rows; validation candidate recall so far 0.9929 | RAM 2.6 GB
+[    122s]   India: cleaned 35,490 S1 + 161,341 S2/S3 | RAM 2.3 GB
+[    131s]   India: 999,828 raw candidate pairs | RAM 2.3 GB
+[    135s]   India: 776,345 pairs after pruning (21.9 per S1) | RAM 2.5 GB
+[    149s]   India: 771,350 feature rows; validation candidate recall so far 0.9894 | RAM 2.8 GB
+[    150s] feature matrix (2888380, 74); candidate recall on validation 0.9894 | RAM 2.7 GB
+[    189s] stage 1 trained (330 trees) | RAM 2.3 GB
+[    229s] stage 2 trained (235 trees) | RAM 3.4 GB
+p1                80.06
+tg_p1_margin      16.04
+tg_p1_rank         0.64
+tg_p1_sum          0.62
+sup_same_src       0.28
+s1_p1_sum          0.21
+tg_qs_margin       0.18
+sup_cross_src      0.17
+tg_p1_n50          0.13
+s1_qs_rank         0.12
+n_full_ratio       0.11
+s1_p1_margin       0.11
+s1_ncand           0.09
+tg_qn_margin       0.07
+s1_p1_rank         0.07
+s1_qs_margin       0.07
+s1_qa_rank         0.06
+s1_qn_rank         0.05
+tg_qa_margin       0.05
+n_ratio            0.05
+a_partial          0.05
+n_tsort            0.04
+a_ratio_sorted     0.04
+qs                 0.04
+n_unexpl_s1        0.04
+dtype: float64
+tuning half: {'ef_no_owner': 0.98338, 'ef_owner': 0.98333, 'thr0.7_owner': 0.98291, 'thr0.7_no_owner': 0.98289, 'thr0.6_owner': 0.98282, 'thr0.6_no_owner': 0.98277}
+chosen rule: ef_no_owner
+VALIDATION macro F0.5 (untouched half): 0.98155   | ceiling with perfect decisions on our candidates: 0.99622 | candidate recall 0.9894
+  India: 0.97626 on 4,429 S1
+  US: 0.98366 on 10,569 S1
+[    370s]   France: cleaned 259,452 S1 + 1,434,993 S2/S3 | RAM 2.1 GB
+[    448s]   France: 21,471,111 raw candidate pairs | RAM 2.7 GB
+[    603s]   France: 9,033,945 pairs after pruning (34.8 per S1) | RAM 3.9 GB
+FULL France: 259,452 S1, 3.19 matches per S1, 0.054 empty
+distribution of matches per S1: [13938 20888 52426 67186 53287 31797 13935  4567  1186   211]
+S2/S3 records assigned an owner: 0.576
+
+=== 15 empty France S1 rows with their top-3 candidates ===
+
+S1 `Etudiants Sportive SARL` | `58 Rue Thérésia Cabarrus, Bordeaux, Nouvelle-Aquitaine`   core2='etudiants sportive' addr='rue theresia cabarrus bordeaux' n1='58'
+   p=0.158  `Etudiants Sportive SARL` | ``  core2='etudiants sportive' n1=''
+   p=0.053  `Etudiants Primaire` | `65 Rue Thérésia Cabarrus, Bordeaux, Gironde`  core2='etudiants primaire' n1='65'
+   p=0.008  `francs collège sarl` | `0058 R Thérésia Cabarrus, Bordeaux, Gironde`  core2='francs college' n1='58'
+
+S1 `SI Comite EURL` | `29 RUE Rosa-Bonheur, Residence Rosa-Bonheur - Appt. 28C, Bordeaux, Nouvelle-Aquitaine`   core2='si comite' addr='rue rosa bonheur residence rosa bonheur apt bordeaux' n1='29'
+   p=0.025  `Comité De Si SARL` | ``  core2='comite si' n1=''
+   p=0.008  `SI Comite International EURL` | `38 R Rosa-bonheur, Bordeaux, Nouvelle-Aquitaine`  core2='si comite' n1='38'
+   p=0.008  `Si Comite (France) (SARL)` | ``  core2='si comite' n1=''
+
+S1 `Pessac Pharmacie SARL` | `36 Boulevard Saint Martin, Pessac, Nouvelle-Aquitaine`   core2='pessac pharmacie' addr='blvd st martin pessac' n1='36'
+   p=0.138  `Pessac Pharmacie International SAS` | `17 BOULEVARD SAINT MARTIN, PESSAC`  core2='pessac pharmacie' n1='17'
+   p=0.075  `Pessac  Pharmacie` | `Boulevard Saint Martin, Pessac, Gironde`  core2='pessac pharmacie' n1=''
+   p=0.008  `Pessac Pharmacie Participations SAS` | `17 Bd. Saint Martin, Pessac, Gironde`  core2='pessac pharmacie participations' n1='17'
+
+S1 `École maternelle de Blacklist` | `58 Rue Joseph Doury, Nantes, Pays de la Loire`   core2='ecole maternelle blacklist' addr='rue joseph doury nantes' n1='58'
+   p=0.001  `Amicale de Blacklist SA` | `NO 59 RUE JOSEPH DOURY, Loire-Atlantique, NANTES`  core2='amicale blacklist' n1='59'
+   p=0.000  `Marins Section (SAS)` | `NO 59 RUE JOSEPH DOURY, NANTES, Loire-Atlantique`  core2='marins section' n1='59'
+   p=0.000  `COMBATCLUB.COM` | `NANTES, Loire-Atlantique, 21 RUE JOSEPH DOURY`  core2='combat club' n1='21'
+
+S1 `Fort Generation Sport SARL` | `98 Rue des Cinq Voies, Tourcoing, Hauts-de-France`   core2='fort generation sport' addr='rue cinq voies tourcoing' n1='98'
+   p=0.057  `Fort Generation Collectif SARL` | `98 Rue Des Cnq Voies, Tourcoing, Hauts-de-France`  core2='fort generation collectif' n1='98'
+   p=0.000  `Fort Generation Jeunes Sàrl` | `TOURCOING, 102 R DES CINQ VOIES`  core2='fort generation jeunes' n1='102'
+   p=0.000  `Fort Generation EURL & Fils` | `102 RUE DES CINQ VOIES, TOURCOING`  core2='fort generation fils' n1='102'
+
+S1 `Ets Art` | `16 Rue de Cronstadt, Tourcoing, Hauts-de-France`   core2='ets art' addr='rue cronstadt tourcoing' n1='16'
+   p=0.004  `international art ets` | `37 Rue De Cronstadt, Tourcoing, Nord`  core2='art ets' n1='37'
+   p=0.001  `ART ANCIENS DISTRIBUTION SARL` | `(16) R VAUBAN, TOURCOING, Hauts-de-France`  core2='art anciens distribution' n1='16'
+   p=0.000  `Ets Art S.A.R.L.` | `QUAI GUSTAVE LAMARLE, CALAIS`  core2='ets art' n1=''
+
+S1 `Module Theatre EURL` | `8 Rue de la Devèze, Mérignac, Nouvelle-Aquitaine`   core2='module theatre' addr='rue deveze merignac' n1='8'
+   p=0.001  `MODULE CIE &` | ``  core2='module' n1=''
+   p=0.000  `module club` | `060 BD VAUBAN, LILLE`  core2='module club' n1='60'
+   p=0.000  `Amicale Tends du` | `N° 7 R. DE LA DEVEZE, MERIGNAC, Gironde`  core2='amicale tends' n1='7'
+
+S1 `Wake & Fils SARL` | `16 Rue Crucy, Nantes, Pays de la Loire`   core2='wake fils' addr='rue crucy nantes' n1='16'
+   p=0.015  `Wake &  Fils SAS` | ``  core2='wake fils' n1=''
+   p=0.015  `S.A.R.L. Wake et Fils International` | `20 Rue Crucy, Nantes`  core2='wake fils' n1='20'
+   p=0.001  `Chablais Weebs Electricite` | `16 R De Crucy, Nantes, Loire-Atlantique`  core2='chablais weebs electricite' n1='16'
+
+S1 `Nantes Societe EURL` | `4 Rue Paul Painlevé, Nantes, Pays de la Loire`   core2='nantes societe' addr='rue paul painleve nantes' n1='4'
+   p=0.301  `Scene Chemin Societe Développement` | `Nantes, 4 R. Paul Painlevé`  core2='scene chemin societe developpement' n1='4'
+   p=0.283  `Nantes Societe SARL` | `Nantes, Pays de la Loire, 4 All Goay`  core2='nantes societe' n1='4'
+   p=0.158  `NANTES SPORT EURL` | `7 RUE PAUL PAINLEVE, NANTES, Pays de la Loire`  core2='nantes sport' n1='7'
+
+S1 `BTU Service SAS` | `125 Avenue de la Fin de la Guerre, Tourcoing, Hauts-de-France`   core2='btu' addr='ave fin guerre tourcoing' n1='125'
+   p=0.003  `BTU Service International` | `Nº 129 Avenue De La Fin De La Guerre, Hauts-de-France, Tourcoing`  core2='btu' n1='129'
+
+S1 `Pharmacie Claude` | `86 Rue Marceau, Dunkerque, Hauts-de-France`   core2='pharmacie claude' addr='rue marceau dunkerque' n1='86'
+   p=0.003  `pharmacieclaude.com` | `93 RUE JEAN-BAPTISTE CHARCOT, DUNKERQUE, Hauts-de-France`  core2='pharmacie claude' n1='93'
+   p=0.003  `Pharmacie du Claude EURL` | `39 Rue Jean Bart, Dunkerque, Nord`  core2='pharmacie claude' n1='39'
+   p=0.001  `Pharmacie Claude` | `Rue De Prais, Dunkerque`  core2='pharmacie claude' n1=''
+
+S1 `Ets Trail SAS` | `36 Rue du Bosquet, Dunkerque, Hauts-de-France`   core2='ets trail' addr='rue bosquet dunkerque' n1='36'
+   p=0.003  `ETS-TRAIL [SARL]` | `37 RUE DU BOSQUET, DUNKERQUE, Nord`  core2='ets trail' n1='37'
+   p=0.001  `Trail Institut SARL` | `NO 36 R. DU LION D’OR, DUNKERQUE, Hauts-de-France`  core2='trail institut' n1='36'
+   p=0.000  `SA Ets Theorie` | `113 Rue Du Docteur Zamenhof, Dunkerque`  core2='ets theorie' n1='113'
+
+S1 `Sablees Jeunesse Sportif SARL` | `91 BD Jacquard, Calais, Hauts-de-France`   core2='sablees jeunesse sportif' addr='blvd jacquard calais' n1='91'
+   p=0.158  `Sablees Jêunesse Sportif SAS` | `No. 95 Bd Jacquard, Calais`  core2='sablees jeunesse sportif' n1='95'
+   p=0.008  `MC` | `91 BOULEVARD JACQARD, Calais, Pas-de-Calais`  core2='mc' n1='91'
+   p=0.001  `Sablees Jeunesse Societe SARL` | `No. 95 Bd Jacquard, Calais`  core2='sablees jeunesse societe' n1='95'
+
+S1 `Vivre & Cie` | `79 Avenue John Fitzgerald Kennedy, Tourcoing, Hauts-de-France`   core2='vivre' addr='ave john fitzgerald kennedy tourcoing' n1='79'
+   p=0.008  `Vivre & Cie EURL` | `Hauts-de-France, No 100 Av John Fitzgerald Kennedy, Tourcoing`  core2='vivre' n1='100'
+   p=0.000  `Philatelique Club SASU` | `67 AV. JOHN FITZGERALD KENNEDY, TOURCOING, Hauts-de-France`  core2='philatelique club' n1='67'
+   p=0.000  `Vivre Sêction` | `79 RUE DU BOIS SAVARY, SAINT-NAZAIRE, Loire-Atlantique`  core2='vivre section' n1='79'
+
+S1 `Lhss Sportive SARL` | `105 Rue de Panama, Calais, Hauts-de-France`   core2='lhss sportive' addr='rue panama calais' n1='105'
+   p=0.001  `Los Sportive` | `N° 62 R Du Maréchal Kellermann, Calais`  core2='los sportive' n1='62'
+   p=0.001  `LS Sportive SARL` | `154 R DU VAUXHALL, CALAIS`  core2='ls sportive' n1='154'
+   p=0.000  `BIT Sportive S.A.S` | `124 RUE DE PANAMA, CALAIS`  core2='bit sportive' n1='124'

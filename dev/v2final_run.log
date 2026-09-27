@@ -1,0 +1,83 @@
+﻿DATA_DIR = C:\Users\Lenovo\Projects\amazon_er\dev\real_subset
+[      5s] transliteration dictionary: 156 entries from 21953 native-script pairs | RAM 0.3 GB
+[('limirrad', 'limited'), ('praivarr', 'private'), ('elelpi', 'llp'), ('tek', 'tech'), ('inrarnaashanal', 'international'), ('enrarpraisas', 'enterprises'), ('venchels', 'ventures'), ('indastriis', 'industries'), ('kanstrakshan', 'construction'), ('teknolaji', 'technology'), ('prodakts', 'products'), ('sarviisas', 'services'), ('inphr', 'infra'), ('kansalttanrs', 'consultants'), ('pavar', 'power'), ('inphraastrakchar', 'infrastructure'), ('helttkeyar', 'healthcare'), ('phinaans', 'finance'), ('bildels', 'builders'), ('inpeks', 'impex'), ('maarkkarring', 'marketing'), ('phaunteshan', 'foundation'), ('kansaltting', 'consulting'), ('hospirraalirri', 'hospitality'), ('treding', 'trading')]
+[      8s] half A 35,000, half B 35,000, validation 30,000 S1 records | RAM 0.5 GB
+[     34s]   US: cleaned 85,649 S1 + 386,076 S2/S3 | RAM 1.0 GB
+[     56s]   US: 3,330,435 raw candidate pairs | RAM 1.1 GB
+[     72s]   US: 2,127,738 pairs after pruning (24.8 per S1) | RAM 1.5 GB
+[    109s]   US: 2,117,030 feature rows; validation candidate recall so far 0.9929 | RAM 2.4 GB
+[    137s]   India: cleaned 35,490 S1 + 161,341 S2/S3 | RAM 2.2 GB
+[    163s]   India: 999,828 raw candidate pairs | RAM 2.2 GB
+[    172s]   India: 776,345 pairs after pruning (21.9 per S1) | RAM 2.4 GB
+[    200s]   India: 771,350 feature rows; validation candidate recall so far 0.9894 | RAM 2.7 GB
+[    202s] feature matrix (2888380, 74); candidate recall on validation 0.9894 | RAM 2.6 GB
+[    248s] stage 1 trained (330 trees) | RAM 2.6 GB
+[    248s] cross-encoder: training on 2,000 half-A pairs (29,996 uncertain) | RAM 2.7 GB
+python : Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate 
+limits and faster downloads.
+At line:1 char:652
++ ... NG="utf-8"; python -W ignore colab\er_v2.py *> dev\v2final_run.log; " ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Warning: You ar...ster downloads.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 199/199 [00:00<00:00, 3472.32it/s]
+[transformers] [1mBertForSequenceClassification LOAD REPORT[0m from: 
+sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+Key               | Status  | 
+------------------+---------+-
+classifier.weight | MISSING | 
+classifier.bias   | MISSING | 
+
+Notes:
+- MISSING:	those params were newly initialized because missing from the checkpoint. Consider training on your 
+downstream task.
+[    619s] cross-encoder scored 1,500 uncertain pairs | RAM 2.3 GB
+[    697s] stage 2 trained (222 trees) | RAM 2.7 GB
+p1                87.40
+tg_p1_margin       8.92
+tg_p1_rank         0.69
+tg_p1_sum          0.57
+sup_same_src       0.27
+s1_p1_sum          0.22
+sup_cross_src      0.17
+tg_qs_margin       0.13
+n_full_ratio       0.12
+s1_qs_rank         0.12
+s1_ncand           0.10
+s1_p1_margin       0.09
+tg_qn_margin       0.08
+s1_p1_rank         0.07
+s1_qs_margin       0.07
+s1_qa_rank         0.06
+s1_qn_rank         0.06
+tg_qa_margin       0.05
+a_partial          0.05
+qs                 0.04
+n_ratio            0.04
+n_tsort            0.04
+a_ratio_sorted     0.04
+n_partial          0.03
+a_wjac             0.03
+dtype: float64
+tuning half: {'ef_owner': 0.98343, 'ef_no_owner': 0.9834, 'thr0.7_owner': 0.98262, 'thr0.7_no_owner': 0.98262, 'thr0.8_owner': 0.98251, 'thr0.8_no_owner': 0.98251}
+chosen rule: ef_owner
+VALIDATION macro F0.5 (untouched half): 0.98151   | ceiling with perfect decisions on our candidates: 0.99622 | candidate recall 0.9894
+  India: 0.97586 on 4,429 S1
+  US: 0.98389 on 10,569 S1
+[    840s]   France: cleaned 85,444 S1 + 308,487 S2/S3 | RAM 1.9 GB
+[    891s]   France: 4,154,061 raw candidate pairs | RAM 2.0 GB
+[    939s]   France: 2,066,031 pairs after pruning (24.2 per S1) | RAM 2.4 GB
+[   1150s]   France: 85,444 S1 rows, 2.17 matches per S1, 0.185 empty | RAM 1.9 GB
+[   1188s]   US: cleaned 42,529 S1 + 237,249 S2/S3 | RAM 1.8 GB
+[   1220s]   US: 1,782,374 raw candidate pairs | RAM 1.8 GB
+[   1236s]   US: 1,169,968 pairs after pruning (27.5 per S1) | RAM 2.0 GB
+[   1400s]   US: 42,529 S1 rows, 3.27 matches per S1, 0.057 empty | RAM 1.7 GB
+[   1445s]   India: cleaned 32,418 S1 + 184,538 S2/S3 | RAM 1.6 GB
+[   1475s]   India: 1,103,483 raw candidate pairs | RAM 1.7 GB
+[   1486s]   India: 849,011 pairs after pruning (26.2 per S1) | RAM 1.8 GB
+[   1617s]   India: 32,418 S1 rows, 3.29 matches per S1, 0.057 empty | RAM 1.7 GB
+[   1617s] wrote 160,391 rows, 431,000 matches -> C:\Users\Lenovo\Projects\amazon_er\dev\real_subset\output_v2final/matching_results.tsv | RAM 1.6 GB
+['PASS']

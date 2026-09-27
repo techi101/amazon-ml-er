@@ -1,0 +1,14 @@
+# dataset and generated outputs: never commit
+*.tsv
+*.parquet
+*.npy
+*.zip
+dev/real_subset/
+dev/fake_resource/
+kaggle_out/
+output/
+cache/
+**/__pycache__/
+*.pyc
+.ipynb_checkpoints/
+*.err

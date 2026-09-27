@@ -1,0 +1,271 @@
+﻿[      5s] transliteration dictionary: 156 entries from 21953 native-script pairs | RAM 0.3 GB
+[('limirrad', 'limited'), ('praivarr', 'private'), ('elelpi', 'llp'), ('tek', 'tech'), ('inrarnaashanal', 'international'), ('enrarpraisas', 'enterprises'), ('venchels', 'ventures'), ('indastriis', 'industries'), ('kanstrakshan', 'construction'), ('teknolaji', 'technology'), ('prodakts', 'products'), ('sarviisas', 'services'), ('inphr', 'infra'), ('kansalttanrs', 'consultants'), ('pavar', 'power'), ('inphraastrakchar', 'infrastructure'), ('helttkeyar', 'healthcare'), ('phinaans', 'finance'), ('bildels', 'builders'), ('inpeks', 'impex'), ('maarkkarring', 'marketing'), ('phaunteshan', 'foundation'), ('kansaltting', 'consulting'), ('hospirraalirri', 'hospitality'), ('treding', 'trading')]
+[     25s]   US: cleaned 85,649 S1 + 386,076 S2/S3 | RAM 0.8 GB
+[     37s]   US: 1,660,705 raw candidate pairs | RAM 0.9 GB
+[     41s]   US: 1,227,890 pairs after pruning (14.3 per S1) | RAM 1.0 GB
+[     72s]   India: cleaned 35,490 S1 + 161,341 S2/S3 | RAM 1.7 GB
+[     78s]   India: 620,225 raw candidate pairs | RAM 1.7 GB
+[     79s]   India: 457,346 pairs after pruning (12.9 per S1) | RAM 1.8 GB
+# Error analysis on the regional slice
+
+## 1. Where each true link ends up after candidate generation
+- India:kept: 113,799
+- India:never: 4,433
+- India:pruned: 107
+- US:kept: 276,339
+- US:never: 5,771
+- US:pruned: 232
+
+## 2a. Links never generated/kept (10,204); 25 random
+- 
+  S1 `Coeur Mills Private Limited` | `Viii-586, Theppala House Allapra P O, Perumbavoor, Ernakulam, Kerala`
+     core2=`coeur mills` addr=`viii theppala allapra perumbavoor ernakulam` num1=`586` st=`kl`
+  T  `cmprivate.com` | `VIII-586, <NULL>, KOCHI REGION, Keralam`
+     core2=`cm` addr=`viii kochi keralam` num1=`586` st=``
+- 
+  S1 `Licha Ramirez Integrated Line` | `6148 Meadview Drive, Seven Hills, OH`
+     core2=`licha ramirez integrated line` addr=`meadview dr seven hills` num1=`6148` st=`oh`
+  T  `LICHA [RAMIREZ]` | `MEADVIEW DR, INDEPENDENCE, OH`
+     core2=`licha ramirez` addr=`meadview dr independence` num1=`` st=`oh`
+- 
+  S1 `Sphere Design (India)` | `Aluva, Ernakulam, No.-V/21B, Am Road, Kuttamassery, Kerala`
+     core2=`sphere design` addr=`aluva ernakulam am rd kuttamassery` num1=`21` st=`kl`
+  T  `Sphere Design (nIhdhia)` | `No.-v/3-21b, Ernakulam, KL`
+     core2=`sphere design nihdhia` addr=`ernakulam` num1=`3` st=`kl`
+- 
+  S1 `Link (India) Infratech Private Limited` | `C/O Joel James, Malayinkeezhu, Kothamangalam, Ernakulam, Kerala`
+     core2=`link infratech` addr=`joel james malayinkeezhu kothamangalam ernakulam` num1=`` st=`kl`
+  T  `Sri Irievoaria` | `C/o Joel James, Kothamangalam, Ernakulam, Keralam`
+     core2=`irievoaria` addr=`joel james kothamangalam ernakulam keralam` num1=`` st=``
+- 
+  S1 `Metropolitan Trust` | `175 Amherst Mobile Homes, Amherst, OH`
+     core2=`metropolitan` addr=`amherst mobile homes amherst` num1=`175` st=`oh`
+  T  `Metropolitan Thamot` | `Ohio, 175 Amherst Mobile Homes, Amherts CITY`
+     core2=`metropolitan thamot` addr=`amherst mobile homes amherts` num1=`175` st=`oh`
+- 
+  S1 `Autism Assistance Ministries LLC` | `5295 State Route 732, Unit UTILITY, Eaton, OH`
+     core2=`autism assistance ministries` addr=`state rte utility eaton` num1=`5295` st=`oh`
+  T  `LLC Autism Asicstne Ministries` | `5295 STATE ROUTE 732, EATON, OH`
+     core2=`autism asicstne ministries` addr=`state rte eaton` num1=`5295` st=`oh`
+- 
+  S1 `Lotus Business Private Limited` | `62/5011, Wolfpack Workspaces, Iyyattil Junction, Mg Road, Kerala, Ernakulam, D21`
+     core2=`lotus business` addr=`wolfpack workspaces iyyattil junction mg rd ernakulam` num1=`62` st=`kl`
+  T  `Lotus Private Limited Service` | `D#21, Ernakulam, KL`
+     core2=`lotus` addr=`ernakulam` num1=`21` st=`kl`
+- 
+  S1 `Saint Church` | `Marietta, 730 3rd Street, OH`
+     core2=`saint church` addr=`marietta st` num1=`730` st=`oh`
+  T  `Haloavi` | `730-B Third Street, Marietta, Ohio`
+     core2=`haloavi` addr=`third st marietta` num1=`730` st=`oh`
+- 
+  S1 `Bigg Enterprises-Malappuram` | `House No. 648/7, Malappuram, Kerala, Manjeri House, Companypadi, Nilambur, Malapuram`
+     core2=`bigg malappuram` addr=`malappuram manjeri companypadi nilambur malapuram` num1=`648` st=`kl`
+  T  `Smt Bigg EterprisesM-amappuhram` | `House No. 648/7, Calicut Region, Malappuram, KL`
+     core2=`bigg eterprisesm amappuhram` addr=`calicut malappuram` num1=`648` st=`kl`
+- 
+  S1 `Avs Marketing Private Limited` | `No. 4/461, 2Nd Floor, Suite # 1434, Valamkottil Towers, Judgemukku, Kakkanad, Kochi, Ernakulam, Kerala`
+     core2=`avs marketing` addr=`valamkottil towers judgemukku kakkanad kochi ernakulam` num1=`4` st=`kl`
+  T  `Avs Mrkettng Private Limited` | `No. 4/46, 2Nd Floor, Suite # 1434, Valamkottil Towers, Judgemukku, Kakkanad, Kochi, Ernakulam, Keralam`
+     core2=`avs mrkettng` addr=`valamkottil towers judgemukku kakkanad kochi ernakulam keralam` num1=`4` st=``
+- 
+  S1 `Prairie Initiative` | `1817 52nd Street, Cleveland, OH`
+     core2=`prairie initiative` addr=`st cleveland` num1=`1817` st=`oh`
+  T  `Prairie Initaeie` | `953 52ST STREET, CLEVELAND, OH`
+     core2=`prairie initaeie` addr=`st cleveland` num1=`953` st=`oh`
+- 
+  S1 `Robertson Salon` | `OH, 2303 Bush Boulevard, Reynoldsburg`
+     core2=`robertson salon` addr=`bush blvd reynoldsburg` num1=`2303` st=`oh`
+  T  `Robertson  Soan` | `OH, REYNOLDBSURG, BUSH BLVD`
+     core2=`robertson soan` addr=`reynoldbsurg bush blvd` num1=`` st=`oh`
+- 
+  S1 `Beaver Bioscience LLP` | `Kerala, Cochin Special Economic Zone Kakkanad, Plot No.34, Ernakulam, Kochi`
+     core2=`beaver bioscience` addr=`cochin special economic zone kakkanad ernakulam kochi` num1=`34` st=`kl`
+  T  `Mr Beaver-Bhoslaieceh LLP` | `#34, Kochi, Ernakulam, KL`
+     core2=`beaver bhoslaieceh` addr=`kochi ernakulam` num1=`34` st=`kl`
+- 
+  S1 `Rheba Black Onfolio` | `1007 Bogart Road, Unit 7H, Sandusky, OH`
+     core2=`rheba black onfolio` addr=`bogart rd sandusky` num1=`1007` st=`oh`
+  T  `Rheba (Black)` | `1006 Bogart Rd, PERKINS TWP, OH`
+     core2=`rheba black` addr=`bogart rd perkins` num1=`1006` st=`oh`
+- 
+  S1 `One Industries Private Limited` | `3Rd Floor, Jc Chambers Panampilly Nagar, Panampilly Ernakulam, Ernakulam, Kerala`
+     core2=`industries` addr=`jc chambers panampilly ngr panampilly ernakulam ernakulam` num1=`3` st=`kl`
+  T  `Sri One Ibudtsrirs Private Limited` | `#3Rd Floor, Ernakulam, KL`
+     core2=`ibudtsrirs` addr=`ernakulam` num1=`3` st=`kl`
+- 
+  S1 `Smith Reliable Bancorporation` | `6540 Rogers Avenue, OH, Cleveland`
+     core2=`smith reliable bancorporation` addr=`rogers ave cleveland` num1=`6540` st=`oh`
+  T  `Brixgild` | `6540 Rogers Avenfe, Cleveland, Ohio`
+     core2=`brixgild` addr=`rogers avenfe cleveland` num1=`6540` st=`oh`
+- 
+  S1 `Reform Tea LLP` | `Puthukunnath House, Nnra 17B, Lane 4, Nethajinagar, Edappally North P.O., Kochi, Ernakulam, Kerala`
+     core2=`reform tea` addr=`puthukunnath nnra ln nethajinagar edappally _n kochi ernakulam` num1=`17` st=`kl`
+  T  `Rcffmor  Tea LLP` | `KL, Kochi, No 907 Puthukunnath House, Ernakulam`
+     core2=`rcffmor tea` addr=`kochi puthukunnath ernakulam` num1=`907` st=`kl`
+- 
+  S1 `Digital Staffing Digital PLLC` | `1542 Benjamin Court, Kent, OH`
+     core2=`digital staffing digital` addr=`benjamin ct kent` num1=`1542` st=`oh`
+  T  `Synnex` | `1541 BENJAMIN COURT, KENT CP, OH`
+     core2=`synnex` addr=`benjamin ct kent cp` num1=`1541` st=`oh`
+- 
+  S1 `Great Hospitality-Cincinnati` | `196 Gertrude Rose Lane, Cincinnati, OH`
+     core2=`great hospitality cincinnati` addr=`gertrude rose ln cincinnati` num1=`196` st=`oh`
+  T  `Great HoetpitalityCingcinnati` | `196 Gertrude Roes Ln, Cincinnati, Ohio`
+     core2=`great hoetpitalitycingcinnati` addr=`gertrude roes ln cincinnati` num1=`196` st=`oh`
+- 
+  S1 `Urology Associates` | `6905 Summers Road, Montville, OH`
+     core2=`urology` addr=`summers rd montville` num1=`6905` st=`oh`
+  T  `UROLOGY ASSOCIATES` | `SUMMERS ROAD, HARTSGROVE TWP, OH`
+     core2=`urology` addr=`summers rd hartsgrove` num1=`` st=`oh`
+- 
+  S1 `Perumbavoor Agro LLP` | `Xvii/400 Near, Asramam School Hss, Perumbavoor, Ernakulam, Kerala`
+     core2=`perumbavoor agro` addr=`xvii near asramam school hss perumbavoor ernakulam` num1=`400` st=`kl`
+  T  `Perumbavoor Ao LLP` | `Perumbavoor, Xvii/400 Near, KL`
+     core2=`perumbavoor ao` addr=`perumbavoor xvii near` num1=`400` st=`kl`
+- 
+  S1 `Foster Ready PLLC` | `314 Westland Avenue, Massillon, OH`
+     core2=`foster ready` addr=`westland ave massillon` num1=`314` st=`oh`
+  T  `Foster PLLC Service` | `OH, MASSILLN, Westland Avenue`
+     core2=`foster` addr=`massilln westland ave` num1=`` st=`oh`
+- 
+  S1 `Vkd Storage Pvt Ltd` | `C/O Philip Aa, Anchuthuruthel House, Kottayam, Kerala`
+     core2=`vkd storage` addr=`philip aa anchuthuruthel kottayam` num1=`` st=`kl`
+  T  `Mr Vkd Pvt Ltd Center` | `C/o Philip Aa, Kottayam, Changanassery, KL`
+     core2=`vkd` addr=`philip aa kottayam changanassery` num1=`` st=`kl`
+- 
+  S1 `Pavo Mines Company` | `Vp 12/1175, Madhavam, Mulloor Po, Thiruvananthapuram, Thiruvananthapuram, Trivandrum, Kerala`
+     core2=`pavo mines` addr=`vp madhavam mulloor thiruvananthapuram thiruvananthapuram trivandrum` num1=`12` st=`kl`
+  T  `Zephfaye` | `Vp 12/1175, Thiruvananthapuram, Trivandrum, കേരളം`
+     core2=`zephfaye` addr=`vp thiruvananthapuram trivandrum keralan` num1=`12` st=``
+- 
+  S1 `Delta Bright Silver Group` | `4416 Ranchview Avenue, North Olmsted, OH`
+     core2=`delta bright silver` addr=`ranchview ave _n olmsted` num1=`4416` st=`oh`
+  T  `Delta Bright` | `Ranchview Ave, NORH OLMSTED TOWNSHIP, OH`
+     core2=`delta bright` addr=`ranchview ave norh olmsted` num1=`` st=`oh`
+
+## 2b. Links pruned generated/kept (339); 25 random
+- 
+  S1 `Veis, Inc` | `4455 Winder Drive, Unit 311, Dublin, OH`
+     core2=`veis` addr=`winder dr dublin` num1=`4455` st=`oh`
+  T  `UMBRAHALO` | `4455 WINDER DRIVE, DUBLIN, OH`
+     core2=`umbrahalo` addr=`winder dr dublin` num1=`4455` st=`oh`
+- 
+  S1 `SH Media Pvt. Ltd.` | `10/354(13) Paradise Tower1St Floor, East, Ottapalam, Palakkad, Ottapalam, Kerala, India, Ottapalam, Palakkad, Kerala`
+     core2=`media` addr=`paradise tower st _e ottapalam palakkad ottapalam india ottapalam palakkad kerala` num1=`10` st=`kl`
+  T  `SH PVT. LTD. CENTER` | `10/354(13) PARADISE TOWER1ST FLOOR, EAST, OTTAPALAM, PALAKKAD, OTTAPALAM, KERALA, INDIA, OTTAPALAM, കേരളം`
+     core2=`center` addr=`paradise tower st _e ottapalam palakkad ottapalam india ottapalam keralan` num1=`10` st=`kl`
+- 
+  S1 `Solstice` | `2925 Wayland Avenue, Dayton, OH`
+     core2=`solstice` addr=`wayland ave dayton` num1=`2925` st=`oh`
+  T  `Yumadova formerly: Solstice` | `2925 Wayland Avenue, Dayton, OH`
+     core2=`yumadova` addr=`wayland ave dayton` num1=`2925` st=`oh`
+- 
+  S1 `Wildlife Metropolitan Charities` | `700 Main Street, Unit 16, Hillsboro, OH`
+     core2=`wildlife metropolitan charities` addr=`main st hillsboro` num1=`700` st=`oh`
+  T  `Kelojaxavi Labs formerly Wildlife Metropolitan Charities` | `700 Main Street, Unit 16, Hillsboro, OH`
+     core2=`kelojaxavi` addr=`main st hillsboro` num1=`700` st=`oh`
+- 
+  S1 `Scholarship Trust LLC` | `926 Meandering Creek Street, Hartville, OH`
+     core2=`scholarship` addr=`meandering creek st hartville` num1=`926` st=`oh`
+  T  `Gildnex` | `905-907 MEANDERING CREEK STREET, HARTVILLE, OH`
+     core2=`gildnex` addr=`meandering creek st hartville` num1=`905` st=`oh`
+- 
+  S1 `Eastern Ventures Limited` | `Azhicode P. O, Thiruvananthapuram, Chembakassery Chekkakonam, Trivandrum, Kerala`
+     core2=`eastern` addr=`azhicode thiruvananthapuram chembakassery chekkakonam trivandrum` num1=`` st=`kl`
+  T  `Brixyuma Co DBA Eastern Ventures Limited` | `Chembakassery Chekkakonam, Azhicode P. O, Thiruvananthapuram, Trivandrum, Kerala`
+     core2=`brixyuma` addr=`chembakassery chekkakonam azhicode thiruvananthapuram trivandrum` num1=`` st=`kl`
+- 
+  S1 `Dermatology Sterling Specialists LLC` | `1599 Newland Ridge Road, Waverly, OH`
+     core2=`dermatology sterling specialists` addr=`newland ridge rd waverly` num1=`1599` st=`oh`
+  T  `ONYXVIO` | `1599. NEWLAND RIDGE ROAD, PEBBLE TWP, OH`
+     core2=`onyxvio` addr=`newland ridge rd pebble` num1=`1599` st=`oh`
+- 
+  S1 `High Services Private Limited` | `Door No 37/1314 E, Kalyana, Krishna S Bhavan, Ernakulam, Kerala`
+     core2=`high` addr=`_e kalyana krishna _s bhavan ernakulam` num1=`37` st=`kl`
+  T  `Fluxlyra` | `Ernakulam, Kalyana, Krishna S Bhavan, #7/1314 E, KL`
+     core2=`fluxlyra` addr=`ernakulam kalyana krishna _s bhavan _e` num1=`7` st=`kl`
+- 
+  S1 `City Tech Private Limited` | `4/901, Smart Trade City, Kottakkal Po, Tirur, Malappuram, Malapuram, Kerala`
+     core2=`city tech` addr=`smart trade kottakkal tirur malappuram malapuram` num1=`4` st=`kl`
+  T  `Jaxdova` | `Malappuram, Kerala, Smart Trade City, Kottakkal Po, Tirur, Malapuram, 4/901`
+     core2=`jaxdova` addr=`malappuram smart trade kottakkal tirur malapuram` num1=`4` st=`kl`
+- 
+  S1 `Federal Corporation LLC` | `8871 St Rte 117, Spencerville, OH`
+     core2=`federal` addr=`st rte spencerville` num1=`8871` st=`oh`
+  T  `HALOBRIX` | `#8871 ST RTE 117, SPENCERVILLE CDP, OH`
+     core2=`halobrix` addr=`st rte spencerville` num1=`8871` st=`oh`
+- 
+  S1 `XUB Ridge Bancorporation Center` | `4487 Karl Road, Unit C, Columbus, OH`
+     core2=`xub ridge bancorporation` addr=`karl rd columbus` num1=`4487` st=`oh`
+  T  `Synyuma DBA XUB Ridge Bancorporation Center` | `4487 Karl Road, Unit C, Columbus, OH`
+     core2=`synyuma` addr=`karl rd columbus` num1=`4487` st=`oh`
+- 
+  S1 `Super & Co` | `Hebron View Building Neeruvilayil, Kumbanad Po Thiruvalla Pathanamthitta, Thiruvalla, Pathanamthitta, Kerala`
+     core2=`super` addr=`hebron view bldg neeruvilayil kumbanad thiruvalla pathanamthitta thiruvalla pathanamthitta` num1=`` st=`kl`
+  T  `Smrp &  Co` | `Kerala, THIRUVALLA, PATHANAMTHITTA, KUMBANAD PO THIRUVALLA PATHANAMTHITTA, HEBRON VIEW BUILDING NEERUVILAYIL`
+     core2=`smrp` addr=`thiruvalla pathanamthitta kumbanad thiruvalla pathanamthitta hebron view bldg neeruvilayil` num1=`` st=`kl`
+- 
+  S1 `Monarch` | `2345 Kemp Road, Beavercreek, OH`
+     core2=`monarch` addr=`kemp rd beavercreek` num1=`2345` st=`oh`
+  T  `Néxyuma` | `2345. KEMP ROAD, DAYOTN, OH`
+     core2=`nexyuma` addr=`kemp rd dayotn` num1=`2345` st=`oh`
+- 
+  S1 `Shree It Private Limited` | `3/429/B Karimpanakkal Arcade Bheemanadi, Kasargod, Kerala, Kasaragod`
+     core2=`it` addr=`karimpanakkal arcade bheemanadi kasargod kasaragod` num1=`3` st=`kl`
+  T  `Shree` | `3/429/B Karimpanakkal Arcade Bheemanadi, Kasaragod, Kasargod, Kerala`
+     core2=`shree` addr=`karimpanakkal arcade bheemanadi kasaragod kasargod` num1=`3` st=`kl`
+- 
+  S1 `Orthopedic Modern Specialists LP` | `30630 Drouillard Road, Unit 356, Walbridge, OH`
+     core2=`orthopedic modern specialists` addr=`drouillard rd walbridge` num1=`30630` st=`oh`
+  T  `Soliri t/a Orthopedic Modern Specialists LP` | `OH, Unit 356, Walbridge, 30630 Drouillard Road`
+     core2=`soliri` addr=`walbridge drouillard rd` num1=`356` st=`oh`
+- 
+  S1 `Cultural League Corp` | `2354 Nebraska Avenue, Toledo, OH`
+     core2=`cultural league` addr=`nebraska ave toledo` num1=`2354` st=`oh`
+  T  `Vionexkor` | `Nebraska Avenue, Toledo, Ohio`
+     core2=`vionexkor` addr=`nebraska ave toledo` num1=`` st=`oh`
+- 
+  S1 `Gold Consulting` | `No.4/461, 2 Nd Floor, Valamkottil Towers, Judgemukku, Kakkanad, Kochi, Kerala, Ernakulam, Kerala`
+     core2=`gold consulting` addr=`nd valamkottil towers judgemukku kakkanad kochi ernakulam kerala` num1=`4` st=`kl`
+  T  `Korwexnyla trading as Gold Consulting` | `Ernakulam, Kerala, 2 Nd Floor, Valamkottil Towers, Judgemukku, Kakkanad, Kochi, Kerala, No.4/461`
+     core2=`korwexnyla` addr=`ernakulam nd valamkottil towers judgemukku kakkanad kochi kerala` num1=`2` st=`kl`
+- 
+  S1 `Tirupati Ventures Private Limited` | `Door No. 30/585, Calicut Road, Perinthalmanna Po, Perinthalmanna, Malappuram, Malapuram, Kerala`
+     core2=`tirupati` addr=`calicut rd perinthalmanna perinthalmanna malappuram malapuram` num1=`30` st=`kl`
+  T  `Onyxecto Formerly Tirupati Ventures Private Limited` | `Door No. 30/585, Calicut Road, Perinthalmanna Po, Perinthalmanna, Malappuram, Malapuram, Kerala`
+     core2=`onyxecto` addr=`calicut rd perinthalmanna perinthalmanna malappuram malapuram` num1=`30` st=`kl`
+- 
+  S1 `Highland Center` | `521 E Lawn Avenue, Urbana, OH`
+     core2=`highland` addr=`_e lawn ave urbana` num1=`521` st=`oh`
+  T  `Hálokor` | `521 E Lawn Avenue, Urbana, Ohio`
+     core2=`halokor` addr=`_e lawn ave urbana` num1=`521` st=`oh`
+- 
+  S1 `Helios` | `5147 Crofton Avenue, Solon, OH`
+     core2=`helios` addr=`crofton ave solon` num1=`5147` st=`oh`
+  T  `Hsssoo` | `5147 CROFTON AVE, SOLON, OH`
+     core2=`hsssoo` addr=`crofton ave solon` num1=`5147` st=`oh`
+- 
+  S1 `Family Association` | `576 Cr 37, Bellefontaine, OH`
+     core2=`family association` addr=`cr bellefontaine` num1=`576` st=`oh`
+  T  `Family Service` | `576 CR 37, RUSHCREEK TWP, OH`
+     core2=`family` addr=`cr rushcreek` num1=`576` st=`oh`
+- 
+  S1 `International Properties` | `Souparnikakunnathmanalane, Thrissur, Kerala`
+     core2=`properties` addr=`souparnikakunnathmanalane thrissur` num1=`` st=`kl`
+  T  `Gildnylaumbra a/k/a International Properties` | `Souparnikakunnathmanalane, Thrissur, Kerala`
+     core2=`gildnylaumbra` addr=`souparnikakunnathmanalane thrissur` num1=`` st=`kl`
+- 
+  S1 `Global Charter School Center` | `1090 Parsons Avenue, Fl 1, Columbus, OH`
+     core2=`charter school` addr=`parsons ave columbus` num1=`1090` st=`oh`
+  T  `Arianyla DBA: Global Charter School Center` | `Fl 1, OH, Columbus, 1090 Parsons Avenue`
+     core2=`arianyla` addr=`columbus parsons ave` num1=`1` st=`oh`
+- 
+  S1 `Raven` | `8711 East Avenue, Unit G, Mentor, OH`
+     core2=`raven` addr=`_e ave mentor` num1=`8711` st=`oh`
+  T  `Dovaumbraarc` | `East Ave, Mentor, Ohio`
+     core2=`dovaumbraarc` addr=`_e ave mentor` num1=`` st=`oh`
+- 
+  S1 `Orthopedic Medicine, Inc` | `Crestline, 412 Colby Road, OH`
+     core2=`orthopedic medicine` addr=`crestline colby rd` num1=`412` st=`oh`
+  T  `Verakelo aka Orthopedic Medicine, Inc` | `412 Colby Road, Crestline, OH`
+     core2=`verakelo` addr=`colby rd crestline` num1=`412` st=`oh`

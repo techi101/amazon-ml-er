@@ -1,0 +1,19 @@
+{
+    "competition_sources":  [
+
+                            ],
+    "id":  "techie1011/amazon-er-v2",
+    "enable_gpu":  true,
+    "kernel_type":  "notebook",
+    "kernel_sources":  [
+
+                       ],
+    "dataset_sources":  [
+                            "satwiksps/amazon-ml-challenge-2026"
+                        ],
+    "is_private":  true,
+    "enable_internet":  true,
+    "language":  "python",
+    "title":  "amazon-er-v2",
+    "code_file":  "amazon_er_v2_kaggle.ipynb"
+}

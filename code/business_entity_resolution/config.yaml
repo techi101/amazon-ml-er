@@ -1,0 +1,37 @@
+# Paths are relative to the directory you run from (student_resource/ by default).
+paths:
+  train_dir: dataset/train
+  test_dir: dataset/test
+  output_dir: output
+  cache_dir: cache
+
+seed: 42
+n_folds: 5
+
+blocking:
+  # candidates kept per Source-1 record, per target source, per blocker
+  k_name_char: 15
+  k_full_char: 15
+  k_full_word: 10
+  k_postcode: 8
+  k_reverse: 3          # for each S2/S3 record, its top-k Source-1 records (full char TF-IDF)
+  max_candidates: 80    # hard cap per Source-1 record after the union (best-first)
+  chunk_size: 1024
+
+model:
+  lgb_params:
+    objective: binary
+    learning_rate: 0.05
+    num_leaves: 63
+    min_child_samples: 20
+    feature_fraction: 0.8
+    bagging_fraction: 0.8
+    bagging_freq: 1
+    lambda_l2: 1.0
+    verbose: -1
+  num_boost_round: 2000
+  early_stopping_rounds: 100
+
+decision:
+  mc_samples: 512       # Monte-Carlo draws for the expected-F0.5 set choice
+  max_k: 20             # largest match set considered per Source-1 record

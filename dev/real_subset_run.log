@@ -1,0 +1,63 @@
+﻿[      6s] transliteration dictionary: 156 entries from 21953 native-script pairs | RAM 0.3 GB
+[('limirrad', 'limited'), ('praivarr', 'private'), ('elelpi', 'llp'), ('tek', 'tech'), ('inrarnaashanal', 'international'), ('enrarpraisas', 'enterprises'), ('venchels', 'ventures'), ('indastriis', 'industries'), ('kanstrakshan', 'construction'), ('teknolaji', 'technology'), ('prodakts', 'products'), ('sarviisas', 'services'), ('inphr', 'infra'), ('kansalttanrs', 'consultants'), ('pavar', 'power'), ('inphraastrakchar', 'infrastructure'), ('helttkeyar', 'healthcare'), ('phinaans', 'finance'), ('bildels', 'builders'), ('inpeks', 'impex'), ('maarkkarring', 'marketing'), ('phaunteshan', 'foundation'), ('kansaltting', 'consulting'), ('hospirraalirri', 'hospitality'), ('treding', 'trading')]
+[      7s] train S1 sample 60,000, validation S1 sample 30,000 | RAM 0.3 GB
+[     43s]   US: cleaned 85,649 S1 + 386,076 S2/S3 | RAM 0.8 GB
+[     55s]   US: 1,660,705 raw candidate pairs | RAM 0.9 GB
+[     59s]   US: 1,227,890 pairs after pruning (14.3 per S1) | RAM 1.0 GB
+[     76s]   US: 1,103,247 feature rows; val blocking recall so far 0.9786 | RAM 1.2 GB
+[     87s]   India: cleaned 35,490 S1 + 161,341 S2/S3 | RAM 1.1 GB
+[     93s]   India: 620,225 raw candidate pairs | RAM 1.2 GB
+[     94s]   India: 457,346 pairs after pruning (12.9 per S1) | RAM 1.2 GB
+[    101s]   India: 408,208 feature rows; val blocking recall so far 0.9736 | RAM 1.2 GB
+[    102s] feature matrix (1511455, 54); positives 0.216; blocking recall on val 0.9736 | RAM 1.3 GB
+Training until validation scores don't improve for 100 rounds
+[200]	valid_0's binary_logloss: 0.0184564
+[400]	valid_0's binary_logloss: 0.017887
+[600]	valid_0's binary_logloss: 0.0178537
+Early stopping, best iteration is:
+[512]	valid_0's binary_logloss: 0.017805
+tg_qs_margin      53.91
+tg_qs_rank        17.54
+num_symdiff       10.80
+num_contain        3.48
+n_full_ratio       2.64
+qs                 1.80
+n_unexpl_t         1.21
+legal_state        1.13
+n_tsort            1.09
+n_alias_best       0.77
+n_unexpl_s1        0.50
+s1_qs_margin       0.32
+n_partial          0.31
+n_ratio            0.31
+t_unk_frac         0.27
+a_contain          0.27
+t_joined           0.27
+a_wjac             0.23
+n_tset             0.23
+num1_state         0.22
+n2_tset            0.22
+s1_ncand           0.22
+n_jw_nospace       0.21
+a_ratio_sorted     0.20
+a_unexpl_t         0.19
+dtype: float64
+half A (tuning): {'ef_no_owner': 0.9765, 'thr0.3_no_owner': 0.9682, 'thr0.4_no_owner': 0.9738, 'thr0.5_no_owner': 0.9752, 'thr0.6_no_owner': 0.9764, 'thr0.7_no_owner': 0.9769, 'ef_owner': 0.9768, 'thr0.3_owner': 0.9694, 'thr0.4_owner': 0.9745, 'thr0.5_owner': 0.9758, 'thr0.6_owner': 0.9769, 'thr0.7_owner': 0.9772}
+chosen rule: thr0.7_owner
+VALIDATION macro F0.5 on half B (untouched): 0.9763
+  US: 0.9786 on 10,641 S1
+  India: 0.9710 on 4,348 S1
+[    206s]   France: cleaned 85,444 S1 + 308,487 S2/S3 | RAM 1.1 GB
+[    217s]   France: 3,649,199 raw candidate pairs | RAM 1.3 GB
+[    226s]   France: 1,658,722 pairs after pruning (19.4 per S1) | RAM 1.4 GB
+[    269s]   France: 85,444 S1 rows, 181,505 matches, 0.194 empty | RAM 1.1 GB
+[    280s]   US: cleaned 42,529 S1 + 237,249 S2/S3 | RAM 1.1 GB
+[    288s]   US: 715,427 raw candidate pairs | RAM 1.1 GB
+[    290s]   US: 577,158 pairs after pruning (13.6 per S1) | RAM 1.1 GB
+[    303s]   US: 42,529 S1 rows, 134,349 matches, 0.063 empty | RAM 1.1 GB
+[    315s]   India: cleaned 32,418 S1 + 184,538 S2/S3 | RAM 1.1 GB
+[    322s]   India: 662,249 raw candidate pairs | RAM 1.1 GB
+[    323s]   India: 481,051 pairs after pruning (14.8 per S1) | RAM 1.1 GB
+[    335s]   India: 32,418 S1 rows, 103,398 matches, 0.062 empty | RAM 1.1 GB
+[    335s] wrote 160,391 rows, 419,252 matches -> C:\Users\Lenovo\Projects\amazon_er\dev\real_subset\output/matching_results.tsv | RAM 1.1 GB
+['PASS']
