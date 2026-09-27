@@ -146,8 +146,9 @@ recall 0.9927 (v3 0.9894), ceiling 0.99693. Kaggle: techie1011/amazon-er-v4-cpu 
 PASS-checked file exists.
 
 Known risks / what to look at if you have time:
-- France predicts ~2.17 matches/S1 and ~18.5% empty lists vs 3.3 and 5.6% for US/India;
-  France may be under-matched (no French training data). Check France rows by eye.
+- France: the slice showed 2.17 matches/S1 and 18.5% empty, but that is a slice artifact (the slice
+  keeps only records whose address names Gironde/Nouvelle-Aquitaine, so many true targets were cut).
+  On the FULL French test set: 3.19 matches/S1, 5.4% empty, close to US/India. Not a problem.
 - On the full data, candidate recall (India 93.8%) is now the biggest loss, then decisions.
 - A reported leaderboard score at rank 9 was 0.9988 (unconfirmed), so there is headroom.
 
