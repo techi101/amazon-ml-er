@@ -1,7 +1,7 @@
 # Methodology: Business Entity Resolution (Amazon ML Challenge 2026)
 
 > Draft. Copy these sections into the official `Documentation_template.md` if its headings differ.
-> Numbers marked **[FULL RUN]** are filled in from `output/validation.json` of the final run.
+> Full-data numbers come from `output/validation.json` of the submitted run (Kaggle, v3 GPU, 3.75 h).
 
 ## 1. Problem and approach in one paragraph
 
@@ -65,7 +65,7 @@ and at most 50 candidates per S1 record. The trimmed set is exactly what the mod
 written to `candidate_pairs.tsv`.
 
 Blocking quality (validation, held-out S1 records): candidate recall **0.989** on the regional
-development slice; **[FULL RUN]** on the full data. Pairs per S1 record: ~14–27.
+development slice and **0.9595** on the full data (US 0.9726). Pairs per S1 record: ~14–27.
 
 ## 5. Pair features (~74)
 
@@ -114,9 +114,12 @@ development slice; **[FULL RUN]** on the full data. Pairs per S1 record: ~14–2
 | Run | Validation macro F0.5 | US | India | Candidate recall | Ceiling* |
 |---|---:|---:|---:|---:|---:|
 | Regional slice (Ohio, Kerala, Gironde) | 0.9816 | 0.984 | 0.976 | 0.989 | 0.996 |
-| Full data | **[FULL RUN]** | | | | |
+| Full data (submitted run: 80k/80k training S1, 40k validation, GPU cross-encoder) | **0.97272** | 0.97825 | 0.96461 | 0.9595 | 0.98465 |
 
 \*Ceiling = score with perfect decisions on our candidates.
+
+Test output: 1,732,544 S1 rows, 5,652,360 matches; US 3.32 matches/S1 (5.7% empty),
+France 3.32 (5.0% empty), India 3.20 (6.5% empty). Passes the official `validate_submission.py`.
 
 ## 9. Reproducibility and compliance
 
