@@ -180,7 +180,11 @@ IN_STATES = {"andhra pradesh": "ap", "arunachal pradesh": "ar", "assam": "as", "
     "telangana": "tg", "tripura": "tr", "uttar pradesh": "up", "uttarakhand": "uk", "uttaranchal": "uk",
     "west bengal": "wb", "delhi": "dl", "nct of delhi": "dl", "jammu and kashmir": "jk", "ladakh": "la",
     "chandigarh": "ch", "puducherry": "py", "pondicherry": "py", "andaman and nicobar islands": "an",
-    "lakshadweep": "ld", "dadra and nagar haveli and daman and diu": "dn"}
+    "lakshadweep": "ld", "dadra and nagar haveli and daman and diu": "dn",
+    "keralam": "kl", "keralan": "kl", "paschimbanga": "wb", "pashchimabanga": "wb", "pashchim banga": "wb",
+    "paschim banga": "wb", "pashchimbang": "wb", "tamizhnadu": "tn", "tamilnaadu": "tn", "odisa": "od",
+    "orisa": "od", "karnaatak": "ka", "karnaataka": "ka", "gujaraat": "gj", "mahaaraashtr": "mh",
+    "uttaraakhand": "uk", "telangaan": "tg", "telangaana": "tg", "aandhr pradesh": "ap", "bihaar": "br"}
 FR_REGIONS = {"hauts de france": "hdf", "nouvelle aquitaine": "naq", "pays de la loire": "pdl",
     "ile de france": "idf", "auvergne rhone alpes": "ara", "provence alpes cote d azur": "paca",
     "occitanie": "occ", "grand est": "ges", "bretagne": "bre", "normandie": "nor",
@@ -525,17 +529,27 @@ def hkey(parts, ok):
     return h
 
 
-def build_keys(F, name_df, addr_df, country):
+def build_keys(F, name_df, addr_df, country, side):
     """kind -> list of (row index array, int64 key array). A row can emit several keys per kind
     (its alias as well as its main name; one key per rare word for the token kinds)."""
     c = country + "|"
     n = len(F)
     K = defaultdict(list)
+    state_arr = np.array(F.ad_state.tolist(), dtype=object)
 
     def add(kind, strings, ok, rows=None):
-        rows = np.arange(n) if rows is None else np.asarray(rows)
-        if len(rows):
-            K[kind].append((rows, hkey(strings, ok)))
+        """Keys are scoped to the record's state, so a key group across a whole country stays as small
+        as within one state. Records without a state fall back to a country-wide key: S2/S3 records
+        emit it only when they have no state, S1 records always emit it so those can still be found."""
+        rows = np.arange(n) if rows is None else np.asarray(rows, dtype=np.int64)
+        if not len(rows):
+            return
+        ok = np.asarray(ok, bool)
+        st = state_arr[rows]
+        has = st != ""
+        K[kind].append((rows, hkey([s + "#" + x for s, x in zip(st, strings)], ok & has)))
+        unscoped = ["@" + x for x in strings]
+        K[kind].append((rows, hkey(unscoped, ok if side == "s1" else ok & ~has)))
 
     num1 = F.ad_num1.tolist()
     views = [F.nm_core2.tolist()]
@@ -645,6 +659,37 @@ def clean_frame(raw, vocab):
     return pd.concat(parts, ignore_index=True)
 
 
+def infer_states(A, B, country, min_count=5, min_purity=0.9):
+    """Fill a missing state from the address words. S1 addresses nearly always carry a state, so they
+    show which state each city / locality word belongs to (lucknow -> up, thrissur -> kl)."""
+    w_rows, s_rows = [], []
+    for ws, st in zip(A.ad_wset.tolist(), A.ad_state.tolist()):
+        if st:
+            for w in ws.split():
+                if len(w) >= 4 and w not in STREET_TYPES:
+                    w_rows.append(w)
+                    s_rows.append(st)
+    if not w_rows:
+        return
+    d = pd.DataFrame({"w": w_rows, "st": s_rows})
+    cnt = d.groupby(["w", "st"]).size().rename("n").reset_index()
+    tot = cnt.groupby("w").n.transform("sum")
+    cnt = cnt[(tot >= min_count) & (cnt.n / tot >= min_purity)]
+    word_state = dict(zip(cnt.w, cnt.st))
+    for D, name in ((A, "S1"), (B, "S2/S3")):
+        states = D.ad_state.tolist()
+        filled = 0
+        for i, (st, ws) in enumerate(zip(states, D.ad_wset.tolist())):
+            if not st:
+                votes = Counter(word_state[w] for w in ws.split() if w in word_state)
+                if votes:
+                    states[i] = votes.most_common(1)[0][0]
+                    filled += 1
+        D["ad_state"] = pd.array(states, dtype="string[pyarrow]")
+        log(f"  {country}: state inferred from address words for {filled:,} {name} records "
+            f"({np.mean([not x for x in states]):.3f} still without state)")
+
+
 def prepare_country(s1_raw, t_raw, country, keep_raw=False):
     """Clean both sides, generate candidates, quick-score and prune them."""
     vocab_c = Counter()
@@ -653,8 +698,18 @@ def prepare_country(s1_raw, t_raw, country, keep_raw=False):
             vocab_c.update(t.split())
     tot = sum(vocab_c.values()) or 1
     vocab = {w: math.log(c / tot) for w, c in vocab_c.items() if len(w) > 1}
-    A, B = clean_frame(s1_raw, vocab), clean_frame(t_raw, vocab)
+    cache = os.environ.get("ER_CLEAN_CACHE")
+    key = f"{cache}/{country}_{len(s1_raw)}_{len(t_raw)}_{s1_raw.entity_id.iloc[0]}_{t_raw.entity_id.iloc[0]}"
+    if cache and os.path.exists(key + "_A.parquet"):
+        A, B = pd.read_parquet(key + "_A.parquet"), pd.read_parquet(key + "_B.parquet")
+    else:
+        A, B = clean_frame(s1_raw, vocab), clean_frame(t_raw, vocab)
+        if cache:
+            os.makedirs(cache, exist_ok=True)
+            A.to_parquet(key + "_A.parquet")
+            B.to_parquet(key + "_B.parquet")
     B["is_s3"] = B.entity_id.str.startswith("S3").to_numpy(dtype=bool)
+    infer_states(A, B, country)
     log(f"  {country}: cleaned {len(A):,} S1 + {len(B):,} S2/S3")
 
     name_df = df_counts(pd.concat([A.nm_core2, B.nm_core2])).to_dict()
@@ -662,7 +717,7 @@ def prepare_country(s1_raw, t_raw, country, keep_raw=False):
     s1_vocab = set(df_counts(A.nm_core2).index)
     B["unk_frac"] = [np.mean([w not in s1_vocab for w in t.split()]) if t else 1.0 for t in B.nm_core2.tolist()]
     A["unk_frac"] = 0.0
-    KA, KB = build_keys(A, name_df, addr_df, country), build_keys(B, name_df, addr_df, country)
+    KA, KB = build_keys(A, name_df, addr_df, country, "s1"), build_keys(B, name_df, addr_df, country, "t")
     codes, masks = [], []
     for bit, kn in enumerate(KEY_NAMES):
         i1, it = join_key(KA.get(kn, []), KB.get(kn, []), *KEY_CAPS[kn])
@@ -890,7 +945,7 @@ def to_sets(s1_ids, cand_ids, mask):
 def p_context(s1_codes, t_codes, p):
     """How a pair's stage-1 probability compares with its competitors on both sides."""
     out = {}
-    for g, nm in ((s1_codes, "s1"), (t_codes, "tg")):
+    for g, nm in ((s1_codes, "s1"),):
         r, m, _ = group_context(g, p.astype(np.float32))
         out[f"{nm}_p1_rank"], out[f"{nm}_p1_margin"] = r, m
         out[f"{nm}_p1_sum"] = pd.Series(p).groupby(g).transform("sum").to_numpy(np.float32)
@@ -1049,7 +1104,7 @@ for country in s1_all.country.unique():
     i1a, ita = P.i1.to_numpy(), P.it.to_numpy()
     y = (owner[ita] == s1_id[i1a]).astype(np.int8)
     grp = pd.Series(s1_id).map(GROUP).fillna(0).astype(np.int8).to_numpy()[i1a]
-    closure = np.isin(ita, np.unique(ita[grp > 0]))
+    closure = np.isin(ita, np.unique(ita[grp == 3])) & (P.tg_qs_rank.to_numpy() < 3)
     take = (grp > 0) | closure
     va_s1 = [s for s in s1_id if GROUP.get(s) == 3]
     recall["true_links"] += sum(len(TRUE[s]) for s in va_s1)

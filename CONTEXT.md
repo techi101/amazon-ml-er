@@ -104,8 +104,16 @@ editions (`er_v2_colab.py`, `er_v2_kaggle.py`, `er_v2_jupyter.py` + matching `.i
 6. Decision: one-owner rule + threshold or expected-F0.5 set choice, picked on validation.
 7. Test predicted per country, written streaming, then format-checked.
 
-Env vars: `ER_DATA_DIR`, `ER_OUT_DIR`, `ER_TRAIN_S1` (default 300000 S1 used for training),
-`ER_VAL_S1` (60000 held out for scoring), `ER_RUN_TEST` (1), `ER_CE` (1 if CUDA), `ER_CE_TRAIN_MAX`.
+Env vars: `ER_DATA_DIR`, `ER_OUT_DIR`, `ER_TRAIN_S1` (S1 records used for training; default
+120000 in the local `er_v2_jupyter.py`, safe on 16 GB, raise to 200000-300000 on 32 GB+),
+`ER_VAL_S1` (held out for scoring; 30000 local), `ER_RUN_TEST` (1), `ER_CE` (1 if CUDA),
+`ER_CE_TRAIN_MAX`, `ER_CLEAN_CACHE` (optional folder to cache cleaned text between runs).
+
+Update 27 Sep ~18:40 (pushed): state-scoped lookup keys; missing states inferred from city words
+learned from S1 addresses; native-script state spellings; memory fix (competing claims only for
+validation targets' top 3; stage-2 competition context on the S1 side only). Full-India check on
+a 16 GB laptop: peak RAM ~4 GB. The same code runs on Kaggle (techie1011/amazon-er-v2 v3 GPU and
+techie1011/amazon-er-v2-cpu).
 
 `code/business_entity_resolution/` is the **older v1** package (TF-IDF blocking, two-stage
 LightGBM). Keep it for reference; v2 scores higher.
@@ -118,12 +126,21 @@ LightGBM). Keep it for reference; v2 scores higher.
 | v2 (CPU, no cross-encoder) | **0.9816** (US 0.984, India 0.976) | 0.989 | 0.996 |
 
 The slice outputs (`dev/real_subset/...`) are NOT submittable (they cover only 160k of 1.73M S1).
-**No full-test run has been done yet: that is the job.**
+**No full-test run has finished yet: that is the job.**
+
+Full-data candidate recall (share of true links the candidate step keeps; the slice was optimistic):
+| | before 27 Sep fixes | after state keys + state inference |
+|---|---:|---:|
+| India (883k S1 × 4.1M targets) | ~91% | 94.0% generated, **93.8% after trimming** |
+| US | 96.9% | not re-measured yet |
+State inference filled 116k targets (India records with no state 9.0% -> 3.2%).
+The other session is diagnosing the remaining ~6% India misses; if a fix lands it will be a new
+commit, so `git pull` before starting a run.
 
 Known risks / what to look at if you have time:
 - France predicts ~2.17 matches/S1 and ~18.5% empty lists vs 3.3 and 5.6% for US/India;
   France may be under-matched (no French training data). Check France rows by eye.
-- Biggest loss is decisions (ceiling 0.996 vs 0.982), then candidate recall (98.9%).
+- On the full data, candidate recall (India 93.8%) is now the biggest loss, then decisions.
 - A reported leaderboard score at rank 9 was 0.9988 (unconfirmed), so there is headroom.
 
 ## 6. Instructions for an AI assistant helping the runner
