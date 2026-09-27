@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Entity Resolution Field Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --paper:#F5F6F2; --panel:#FFFFFF; --ink:#1A2230; --muted:#56606E; --rule:#D9DDD6;
+  --accent:#0E6B73; --accent-soft:#DDEEEF; --match:#2F7D3A; --match-soft:#E2F1E3;
+  --miss:#B7791F; --miss-soft:#FBF0DC; --wrong:#B23A3A; --wrong-soft:#F8E1E1;
+  --code-bg:#EEF0EA;
+  --display:"Familjen Grotesk", "Segoe UI", system-ui, sans-serif;
+  --body:"Literata", Georgia, "Times New Roman", serif;
+  --mono:"JetBrains Mono", Consolas, "Courier New", monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#12161C; --panel:#1A2029; --ink:#E6E9EE; --muted:#A1AAB6; --rule:#2E3643;
+    --accent:#5FC4CC; --accent-soft:#16363A; --match:#7CC985; --match-soft:#1B3320;
+    --miss:#E3B063; --miss-soft:#3A2E17; --wrong:#EE8A8A; --wrong-soft:#3D1F1F; --code-bg:#20262F;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#12161C; --panel:#1A2029; --ink:#E6E9EE; --muted:#A1AAB6; --rule:#2E3643;
+  --accent:#5FC4CC; --accent-soft:#16363A; --match:#7CC985; --match-soft:#1B3320;
+  --miss:#E3B063; --miss-soft:#3A2E17; --wrong:#EE8A8A; --wrong-soft:#3D1F1F; --code-bg:#20262F;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.65;padding-inline:16px;padding-block:0 64px}
+.wrap{max-width:780px;margin:0 auto}
+h1,h2,h3,h4{font-family:var(--display);text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:clamp(34px,6vw,52px);font-weight:700;letter-spacing:-.01em}
+h2{font-size:30px;font-weight:700;margin-top:64px;padding-top:20px;border-top:2px solid var(--ink)}
+h3{font-size:21px;font-weight:600;margin-top:36px}
+h4{font-size:17px;font-weight:600;margin-top:24px}
+p,li{max-width:68ch}
+a{color:var(--accent)}
+code,.mono{font-family:var(--mono);font-size:.84em}
+code{background:var(--code-bg);padding:1px 5px;border-radius:3px}
+pre{font-family:var(--mono);font-size:13.5px;background:var(--code-bg);padding:14px 16px;border-radius:4px;overflow-x:auto;line-height:1.5}
+.eyebrow{font-family:var(--display);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600}
+header.hero{padding-block:48px 24px;display:grid;gap:14px}
+.lede{font-size:19px;color:var(--muted)}
+.deadline{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline;border:2px solid var(--wrong);background:var(--wrong-soft);padding:14px 18px;border-radius:4px;margin-top:8px}
+.deadline b{font-family:var(--display);font-size:22px;color:var(--wrong)}
+.deadline span{font-family:var(--display);font-size:15px}
+nav.toc{margin-top:28px;border-left:3px solid var(--accent);padding-left:16px}
+nav.toc ol{margin:6px 0;padding-left:22px;columns:2 260px;column-gap:28px;font-family:var(--display);font-size:15.5px}
+nav.toc li{break-inside:avoid;margin-bottom:3px}
+.term{margin-top:26px;padding:16px 18px;background:var(--panel);border:1px solid var(--rule);border-radius:4px}
+.term h4{margin-top:0;color:var(--accent)}
+.term dl{display:grid;grid-template-columns:130px 1fr;gap:6px 14px;margin:10px 0 0}
+.term dt{font-family:var(--display);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.term dd{margin:0}
+@media (max-width:560px){.term dl{grid-template-columns:1fr}.term dt{padding-top:8px}}
+.note{padding:12px 16px;border-left:4px solid var(--miss);background:var(--miss-soft);margin:18px 0;border-radius:0 4px 4px 0}
+.key{padding:12px 16px;border-left:4px solid var(--accent);background:var(--accent-soft);margin:18px 0;border-radius:0 4px 4px 0}
+.tbl{overflow-x:auto;margin:16px 0}
+table{border-collapse:collapse;width:100%;font-size:15px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-family:var(--display);font-weight:600;font-size:14px;background:var(--panel)}
+td.n,th.n{text-align:right}
+.tsv td{font-family:var(--mono);font-size:12.5px;white-space:nowrap}
+.flow{display:grid;gap:10px;margin:22px 0}
+.step{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:start;background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:12px 14px}
+.step .num{font-family:var(--display);font-weight:700;font-size:24px;color:var(--accent);line-height:1}
+.step b{font-family:var(--display)}
+.step small{display:block;color:var(--muted);font-size:14px}
+.arrow{text-align:center;color:var(--muted);font-family:var(--display);font-size:13px;letter-spacing:.08em}
+.cm{display:grid;grid-template-columns:auto 1fr 1fr;gap:4px;margin:18px 0;font-family:var(--display);font-size:14.5px;max-width:560px}
+.cm div{padding:10px 12px;border-radius:3px}
+.cm .h{background:transparent;color:var(--muted);font-size:13px;text-transform:uppercase;letter-spacing:.06em}
+.cm .tp{background:var(--match-soft);color:var(--match)} .cm .fp{background:var(--wrong-soft);color:var(--wrong)}
+.cm .fn{background:var(--miss-soft);color:var(--miss)} .cm .tn{background:var(--panel);border:1px solid var(--rule)}
+.pill{display:inline-block;font-family:var(--display);font-size:12.5px;padding:1px 8px;border-radius:10px;font-weight:600}
+.p-ok{background:var(--match-soft);color:var(--match)} .p-bad{background:var(--wrong-soft);color:var(--wrong)} .p-miss{background:var(--miss-soft);color:var(--miss)}
+.calc{background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:18px;margin:20px 0;display:grid;gap:14px}
+.calc .row{display:flex;flex-wrap:wrap;gap:14px}
+.calc label{font-family:var(--display);font-size:14px;display:grid;gap:4px}
+.calc input{font-family:var(--mono);font-size:16px;width:110px;padding:6px 8px;border:1px solid var(--rule);border-radius:3px;background:var(--paper);color:var(--ink)}
+.calc input:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.calc .out{display:flex;flex-wrap:wrap;gap:10px 26px;font-family:var(--display)}
+.calc .out div{display:grid}
+.calc .out small{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+.calc .out strong{font-size:26px;font-variant-numeric:tabular-nums}
+details{border-bottom:1px solid var(--rule);padding:10px 0}
+summary{cursor:pointer;font-family:var(--display);font-weight:600;font-size:16px}
+details p{margin:8px 0 2px}
+.check li{list-style:none;margin-left:-22px;padding-left:28px;position:relative;margin-bottom:6px}
+.check li::before{content:"";position:absolute;left:4px;top:.45em;width:13px;height:13px;border:2px solid var(--accent);border-radius:2px}
+.glossary{display:grid;grid-template-columns:minmax(120px,190px) 1fr;gap:4px 16px;font-size:15.5px}
+.glossary dt{font-family:var(--display);font-weight:600}
+.glossary dd{margin:0 0 6px}
+@media (max-width:560px){.glossary{grid-template-columns:1fr}.glossary dd{margin-bottom:12px}}
+footer{margin-top:60px;color:var(--muted);font-size:14px;font-family:var(--display)}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+
+<div class="wrap">
+
+<header class="hero">
+  <div class="eyebrow">Amazon ML Challenge 2026 · Business Entity Resolution · our team's course</div>
+  <h1>Entity Resolution Field Guide</h1>
+  <p class="lede">Everything about the challenge from zero: what the task is, why it exists, what the data looks like, what precision and recall mean, why we argued about "99.99% precision", and exactly what our pipeline does. Every term is defined the first time it appears, with an example.</p>
+  <div class="deadline"><b>Submission deadline: 12:00 AM tonight</b><span>(midnight, start of 28 Sep 2026, IST)</span><span>Written 27 Sep, 6:45 PM. The full run takes several hours, so it must already be running.</span></div>
+  <nav class="toc" aria-label="Contents">
+    <div class="eyebrow">Contents</div>
+    <ol>
+      <li><a href="#story">The challenge in plain words</a></li>
+      <li><a href="#basics">Basic words you need first</a></li>
+      <li><a href="#data">The dataset we were given</a></li>
+      <li><a href="#facts">What we found inside the data</a></li>
+      <li><a href="#metric">How we are scored: precision, recall, F0.5</a></li>
+      <li><a href="#call">Our precision call</a></li>
+      <li><a href="#why-hard">Why this is hard</a></li>
+      <li><a href="#strategy">Our strategy, step by step</a></li>
+      <li><a href="#rules">Rules that can disqualify us</a></li>
+      <li><a href="#status">Where we stand now</a></li>
+      <li><a href="#tonight">Tonight until midnight</a></li>
+      <li><a href="#qa">Questions people will ask us</a></li>
+      <li><a href="#glossary">Glossary</a></li>
+      <li><a href="#test">Self-test</a></li>
+    </ol>
+  </nav>
+</header>
+
+<!-- ================================================================ -->
+<h2 id="story">1. The challenge in plain words</h2>
+
+<p>Imagine a shop called <b>Orelee's Barbershop</b> at 1795 Westchester Drive, High Point, North Carolina. Amazon hears about this shop from three different places. One list writes it neatly. A second list writes <i>"ORELEES BARBER SHOP, 1795 Westchester Dr, High Point NC"</i>. A third writes <i>"orelee's barbershop llc"</i> with only the street and city. Nobody gave the shop one shared ID number across the three lists. A computer sees three different strings of text.</p>
+
+<p>The question is: <b>which rows in the different lists are the same real business?</b> Answering that is called <b>entity resolution</b>. Our job in this challenge is to build a machine-learning system that answers it for millions of businesses in the US, India and France.</p>
+
+<div class="term">
+  <h4>Entity resolution (ER)</h4>
+  <dl>
+    <dt>What it is</dt><dd>Deciding which records, from one or more lists, describe the same real-world thing (the "entity"). Here the entity is a business. Other names for it: record linkage, deduplication, entity matching.</dd>
+    <dt>Analogy</dt><dd>Your phone has "Mom", "Mummy" and "+91 98xxx" saved as three contacts. Merging them into one contact is entity resolution.</dd>
+    <dt>Why it exists</dt><dd>Big companies buy and collect data from many places. The same seller, supplier or shop shows up many times with different spellings. Without ER you pay the same supplier twice, show duplicate listings, or miss fraud because one bad actor looks like three people.</dd>
+    <dt>Where else it's used</dt><dd>Banks (is this loan applicant the same person as that one?), hospitals (merge patient records), e-commerce (same product listed by two sellers), government (voter rolls, Aadhaar-style dedup), fraud detection.</dd>
+  </dl>
+</div>
+
+<h3>Who runs it and how</h3>
+<p>The <b>Amazon ML Challenge</b> is a yearly machine-learning competition Amazon runs for Indian college students on <b>Unstop</b> (a website that hosts hackathons and competitions). The 2026 problem is "Business Entity Resolution". It is a 72-hour <b>hackathon</b>: a timed contest where teams build something fast. We are running it as a friendly mock between 3–4 college groups. Our team leader (a friend) has the only official data access and does the uploads and the final zip. The rest of us build and run the pipeline.</p>
+
+<h3>The exact task</h3>
+<p>We get three lists, called <b>Source 1</b>, <b>Source 2</b> and <b>Source 3</b> (S1, S2, S3). Source 1 is special: it is the clean <b>reference list</b>, already <b>deduplicated</b> (no business appears twice in it). For <b>every business in Source 1</b>, we must list <b>all</b> the rows in Source 2 and Source 3 that are the same business. The answer can be zero rows, one row, or many rows.</p>
+
+<div class="key"><b>One-sentence summary:</b> for each clean S1 business, find every messy S2/S3 row that is the same business, and don't include any row that isn't.</div>
+
+<!-- ================================================================ -->
+<h2 id="basics">2. Basic words you need first</h2>
+<p>Each term below gets what it is, why it matters here, and an example from our data.</p>
+
+<div class="term"><h4>Machine learning (ML)</h4><dl>
+<dt>What it is</dt><dd>Instead of writing every rule by hand ("if names are 90% similar and cities match, then match"), you show the computer many solved examples and it learns the rules itself.</dd>
+<dt>Here</dt><dd>We have 2.2 million S1 businesses where Amazon already told us the right answers. Our model studies those and learns what a true match looks like.</dd>
+<dt>Analogy</dt><dd>Learning to spot fake notes by looking at thousands of real and fake notes, rather than memorising a rulebook.</dd></dl></div>
+
+<div class="term"><h4>Dataset, record, row, field, column</h4><dl>
+<dt>Dataset</dt><dd>A collection of data, usually tables stored in files.</dd>
+<dt>Record / row</dt><dd>One line in the table = one thing. Here one record = one business as one source saw it.</dd>
+<dt>Field / column</dt><dd>One property of every record. Our columns: <code>entity_id</code>, <code>business_name</code>, <code>business_address</code>, <code>country</code>.</dd>
+<dt>Example</dt><dd><code>S1-773889195 | Prime Money | 17560 Ellis Road, Tahlequah, OK | US</code> is one record with four fields.</dd></dl></div>
+
+<div class="term"><h4>ID (identifier)</h4><dl>
+<dt>What it is</dt><dd>A unique label for one record, like a roll number.</dd>
+<dt>Here</dt><dd>Every row has an <code>entity_id</code>. The prefix tells the source: <code>S1-</code>, <code>S2-</code>, <code>S3-</code>. The IDs are different across sources for the same business, which is exactly why the problem is hard. If S2 used the same ID as S1, there'd be nothing to solve.</dd></dl></div>
+
+<div class="term"><h4>TSV file (and why not CSV)</h4><dl>
+<dt>What it is</dt><dd>A text file where each line is a row and the columns are separated by a <b>tab</b> character. CSV is the same idea with <b>commas</b>.</dd>
+<dt>Why TSV here</dt><dd>Addresses contain commas ("1795 Westchester Drive, High Point, NC") and our answer lists contain commas ("S2-1,S2-2"). If commas also separated columns, the computer couldn't tell a column break from a comma inside an address. Tabs never appear inside names, so they are safe.</dd>
+<dt>Common mistake</dt><dd>Reading with <code>pd.read_csv(file)</code> without <code>sep="\t"</code> gives you one giant column. We read with <code>sep="\t"</code>, <code>quoting=3</code> (don't treat quote marks specially) and <code>keep_default_na=False</code> (don't turn the word "null" or an empty cell into a missing value silently).</dd></dl></div>
+
+<div class="term"><h4>Training set, test set, ground truth, label</h4><dl>
+<dt>Training set</dt><dd>Data where the answers are given. The model learns from it.</dd>
+<dt>Ground truth / label</dt><dd>The correct answer for a training example. Here: <code>train_ground_truth.tsv</code> says, for each train S1 ID, which S2/S3 IDs truly match.</dd>
+<dt>Test set</dt><dd>New data where the answers are hidden. We predict; Amazon scores us against the hidden answers. This stops cheating: you can't memorise answers you never saw.</dd>
+<dt>Analogy</dt><dd>Training set = solved textbook problems. Test set = the exam paper. Ground truth = the answer key only the teacher has for the exam.</dd></dl></div>
+
+<div class="term"><h4>Validation split (held-out set)</h4><dl>
+<dt>What it is</dt><dd>A slice of the training data we hide from our own model, then score ourselves on it. A mock exam before the real exam.</dd>
+<dt>Why</dt><dd>Amazon doesn't give test answers, and leaderboard uploads are limited. So we cut off some train S1 businesses (for example 30,000), train on the rest, and compute our own score on the held-out ones. The problem statement tells every team to do this.</dd>
+<dt>Our split</dt><dd>We split by S1 business, never by row, so a business and its matches are all on one side. Otherwise the model would have seen part of the answer.</dd></dl></div>
+
+<div class="term"><h4>Leaderboard (public vs private)</h4><dl>
+<dt>What it is</dt><dd>A ranking table of team scores on the challenge site.</dd>
+<dt>Public</dt><dd>During the contest, scored on a hidden <i>part</i> of the test set, for live feedback.</dd>
+<dt>Private</dt><dd>After the contest, scored on the <i>remaining</i> part. <b>Final ranks come from the private board.</b> We always upload predictions for the whole test set; Amazon applies the split.</dd>
+<dt>Why it matters</dt><dd>If you tune your model just to climb the public board, you can overfit to that slice and drop on the private board. So we trust our own validation score more than small public-board jumps.</dd></dl></div>
+
+<div class="term"><h4>Overfitting</h4><dl>
+<dt>What it is</dt><dd>A model that memorises the training examples instead of learning general rules. It scores great on data it saw and badly on new data.</dd>
+<dt>Analogy</dt><dd>A student who memorised last year's paper word for word and panics when the numbers change.</dd>
+<dt>Here</dt><dd>The big risk is France: the test has France, training has none. A model overfitted to US/India address patterns can fail on French addresses.</dd></dl></div>
+
+<div class="term"><h4>Singleton</h4><dl>
+<dt>What it is</dt><dd>An S1 business that has <b>no</b> match in S2 or S3. The correct answer is an empty list.</dd>
+<dt>Why it matters</dt><dd>Predicting empty for a singleton earns a perfect 1.0. Predicting even one match for it earns 0. Only 5.6% of S1 businesses are singletons in our data.</dd></dl></div>
+
+<!-- ================================================================ -->
+<h2 id="data">3. The dataset we were given</h2>
+
+<h3>The files</h3>
+<pre>dataset/
+  train/
+    train_source1.tsv        clean reference list (S1)
+    train_source2.tsv        messy list 2 (S2)
+    train_source3.tsv        messy list 3 (S3)
+    train_ground_truth.tsv   the answers for train
+  test/
+    test_source1.tsv         predict for every row here
+    test_source2.tsv
+    test_source3.tsv         (no answers given for test)</pre>
+<p>Total size about 2.5 GB. Our copy lives at <code>Downloads\dataset</code> and in the team Google Drive folder.</p>
+
+<h3>How big</h3>
+<div class="tbl"><table>
+<tr><th></th><th class="n">Train</th><th class="n">Test</th></tr>
+<tr><td>Source 1 rows (the businesses we answer for)</td><td class="n">2,206,821</td><td class="n">1,732,544</td></tr>
+<tr><td>Source 2 rows</td><td class="n">5,034,616</td><td class="n">4,887,273</td></tr>
+<tr><td>Source 3 rows</td><td class="n">5,285,603</td><td class="n">5,082,316</td></tr>
+<tr><td>Countries in S1</td><td class="n">US 60%, India 40%</td><td class="n">India 47%, US 38%, <b>France 15%</b></td></tr>
+</table></div>
+<p>The S2 and S3 rows together are called the <b>pool</b> (the ~10 million rows we search through).</p>
+
+<h3>Real rows from the files</h3>
+<div class="tbl"><table class="tsv">
+<tr><th>entity_id</th><th>business_name</th><th>business_address</th><th>country</th></tr>
+<tr><td>S1-925783039</td><td>Orelee's Barbershop</td><td>1795 Westchester Drive, High Point, NC</td><td>US</td></tr>
+<tr><td>S2-166376419</td><td>राम मार्केटिंग प्राइवेट लिमिटेड</td><td>KH NO. -570/13, NEW DELHI, WEST DELHI, Delhi</td><td>India</td></tr>
+<tr><td>S2-764573417</td><td>-- Holloway Peak Inc Seafood</td><td>105 ELM ST, MORGANTON, NC</td><td>US</td></tr>
+<tr><td>S3-202863386</td><td>wilfordhancock.com</td><td>Mack Rd, Haltom City, Texas</td><td>US</td></tr>
+<tr><td>S3-859268022</td><td>International South Consultants Private Ltd</td><td><i>(empty)</i></td><td>India</td></tr>
+<tr><td>S1-106407869</td><td>Vision Partners Corp</td><td>IA, Iowa City, 1064 Newton Rd, Unit 11</td><td>US</td></tr>
+</table></div>
+<p>Look at how messy S2/S3 are: a Hindi name (<i>Ram Marketing Private Limited</i> written in Devanagari script), junk <code>--</code> at the start, a website instead of a name, an empty address, and an address written in reverse order.</p>
+
+<h3>The answer key (ground truth) format</h3>
+<pre>source1_entity_id	matched_entity_ids
+S1-965667	S2-681193310,S2-743505751,S3-775321672,S3-11291185,S3-860443364
+S1-55344266	S2-249013014,S2-197070651,S3-478195123,S3-384364074</pre>
+<p>One row per S1 business. The second column is a comma-separated list of its matches. Empty means singleton. S1-965667 has 5 matches (2 in S2, 3 in S3).</p>
+
+<h3>What we must upload</h3>
+<p><b>matching_results.tsv</b> — the only file that is scored:</p>
+<pre>source1_entity_id	matched_entity_ids
+S1-00001	S2-00047,S2-00193,S3-00812
+S1-00002	S3-00004
+S1-00003	</pre>
+<p><b>candidate_pairs.tsv</b> — not scored, but audited. It lists every S2/S3 row our model <i>considered</i> for each S1 business, just before the model made its final choice. Amazon uses it to check our blocking (section 8). Every matched ID must also appear here.</p>
+<p>Format rules, any of which gets the file rejected: exactly one row per test S1 ID; no S1 missing; no duplicate IDs in a list; no duplicate S1 rows; only S2/S3 IDs that exist in the test files; no S1 IDs inside the lists. Amazon's checker <code>utils/validate_submission.py</code> prints <b>PASS</b> when a file is safe. Our pipeline runs the same checks and prints <code>['PASS']</code>.</p>
+
+<h3>The noise Amazon warned about</h3>
+<div class="tbl"><table>
+<tr><th>Kind of noise</th><th>Example</th></tr>
+<tr><td>Abbreviations</td><td>Corp / Corporation, Pvt / Private, Ltd / Limited, Rd / Road, St / Street</td></tr>
+<tr><td>Legal suffix added, dropped or changed</td><td>"Prime Money" vs "Prime Money LLC"</td></tr>
+<tr><td>Trade names (DBA = "doing business as")</td><td>"Korwexnyla trading as Gold Consulting"</td></tr>
+<tr><td>Punctuation, & vs "and", word order</td><td>"Smith & Sons" vs "Sons and Smith"</td></tr>
+<tr><td>Typos, leetspeak</td><td>"5ervices" (5 for S), "lndia" (small L for I)</td></tr>
+<tr><td>Transliteration (other script)</td><td>"राम मार्केटिंग" = "Ram Marketing"</td></tr>
+<tr><td>Missing address parts</td><td>no PIN code, no state, or empty address (~4.5%)</td></tr>
+<tr><td>Landmark addresses</td><td>"Near SBI ATM"</td></tr>
+<tr><td>Reordered address parts</td><td>"IA, Iowa City, 1064 Newton Rd"</td></tr>
+<tr><td>House number off or padded</td><td>011265 vs 11265; 1786 vs 1791</td></tr>
+<tr><td>France (test only)</td><td>R. / Rue, Av. / Avenue, Bd, Nº, BIS, legal forms SARL, SAS, EURL, EI</td></tr>
+</table></div>
+
+<div class="term"><h4>Transliteration</h4><dl>
+<dt>What it is</dt><dd>Writing a word from one script in another script by sound. "राम" (Devanagari) → "Ram" (Latin letters). It is not translation: the meaning isn't changed, only the letters.</dd>
+<dt>Why it matters here</dt><dd>About 10% of pool names are in Indian scripts: Devanagari, Telugu, Kannada, Tamil, Bengali, Gujarati, Malayalam, Oriya, Gurmukhi. A computer comparing "राम मार्केटिंग" to "Ram Marketing" letter by letter finds zero overlap. So we convert everything to Latin letters first.</dd></dl></div>
+
+<!-- ================================================================ -->
+<h2 id="facts">4. What we found inside the data</h2>
+<p>Before building anything, we measured the training data. These facts shaped every decision.</p>
+
+<div class="tbl"><table>
+<tr><th>Fact</th><th>Number</th><th>What it means for us</th></tr>
+<tr><td>S1 businesses with no match (singletons)</td><td>5.6%</td><td>94% of businesses have matches. Predicting empty is rarely right, so we can't be too timid. Recall matters.</td></tr>
+<tr><td>Average matches per S1</td><td>3.46 (max 11)</td><td>Most businesses have 2–5 copies to find. Missing one of four costs real score.</td></tr>
+<tr><td>Pool rows owned by 2 S1 businesses</td><td><b>0</b> of 7.64M</td><td>The <b>one-owner rule</b>: an S2/S3 row belongs to at most one S1 business. If two S1s both want the same row, only one can be right.</td></tr>
+<tr><td>Pool rows that match nothing</td><td>26%</td><td>A quarter of the pool is decoys.</td></tr>
+<tr><td>Of those decoys, same cleaned name as some S1</td><td>27%</td><td>"Youth Services" at a different address. Name alone would fool us. Address decides.</td></tr>
+<tr><td>True pairs sharing a name word / address word / house number within ±10</td><td>85% / 95% / 79%</td><td>These overlaps are how we find candidates quickly.</td></tr>
+<tr><td>True pairs sharing none of the three</td><td>0.01%</td><td>If we look up by those three keys we should find almost every true match.</td></tr>
+</table></div>
+
+<div class="note"><b>Hard cases we saw:</b> some pool names are pure random words ("Hsssoo") at the exactly correct address. The only way to match those is the address. And some true matches look wrong even to a human ("Family Association" vs "Family Service"). This is why no system can reach 100%.</div>
+
+<!-- ================================================================ -->
+<h2 id="metric">5. How we are scored: precision, recall, F0.5</h2>
+<p>This is the most important section. Everything about our strategy comes from how the score works.</p>
+
+<h3>Four outcomes for every guess</h3>
+<p>Take one S1 business, say <b>Prime Money</b>. For each pool row, we either say "match" or "not a match", and the truth is either "match" or "not a match". That gives four boxes:</p>
+
+<div class="cm" role="table" aria-label="Confusion matrix">
+  <div class="h"></div><div class="h">Truth: same business</div><div class="h">Truth: different business</div>
+  <div class="h">We said match</div><div class="tp"><b>True positive (TP)</b><br>correct link</div><div class="fp"><b>False positive (FP)</b><br>wrong merge</div>
+  <div class="h">We said no</div><div class="fn"><b>False negative (FN)</b><br>missed link</div><div class="tn"><b>True negative (TN)</b><br>correctly ignored</div>
+</div>
+<p>This 2×2 table is called a <b>confusion matrix</b>. "Positive" just means "we said yes, match". "True/false" says whether we were right.</p>
+
+<ul>
+<li><b>TP</b>: we linked "Prime Money LLC, 17560 Ellis Rd" to Prime Money, and it really is the same shop.</li>
+<li><b>FP</b>: we linked "Prime Money, 22 Main St, Dallas" to it, but that's a different shop with the same name. <b>A false merge.</b></li>
+<li><b>FN</b>: the row "PRIME MNY, Ellis Road, Tahlequah" really is it, and we missed it.</li>
+<li><b>TN</b>: we ignored "Blue Bakery", which is unrelated. There are millions of these, so nobody counts them in ER scores.</li>
+</ul>
+
+<h3>Precision</h3>
+<div class="term"><h4>Precision = TP / (TP + FP)</h4><dl>
+<dt>In words</dt><dd>Of everything we said is a match, what fraction really is? "When we say yes, how often are we right?"</dd>
+<dt>Example</dt><dd>We predict 3 matches, 2 are right. Precision = 2/3 = 0.667.</dd>
+<dt>Analogy</dt><dd>A fisherman's net. Precision = how much of what's in the net is actually fish, not boots and plastic.</dd>
+<dt>How to raise it</dt><dd>Only say "match" when very sure. The cost: you miss some real matches.</dd></dl></div>
+
+<h3>Recall</h3>
+<div class="term"><h4>Recall = TP / (TP + FN)</h4><dl>
+<dt>In words</dt><dd>Of all the true matches that exist, what fraction did we find? "Did we catch them all?"</dd>
+<dt>Example</dt><dd>There are 2 true matches and we found both. Recall = 2/2 = 1.0.</dd>
+<dt>Analogy</dt><dd>How many of the fish in the lake ended up in the net.</dd>
+<dt>How to raise it</dt><dd>Say "match" more generously. The cost: more wrong merges, so precision falls.</dd></dl></div>
+
+<div class="key"><b>The trade-off:</b> precision and recall pull against each other. Our model gives every pair a probability (say 0.93 = "93% sure it's a match"). We pick a <b>threshold</b>: pairs above it are matches. A high threshold (0.95) gives high precision and low recall. A low threshold (0.40) gives high recall and low precision. Picking the threshold is picking a point on this trade-off.</div>
+
+<h3>F-score: one number combining both</h3>
+<p>A single number is needed to rank teams. The <b>F1 score</b> is the harmonic mean of precision and recall: <code>F1 = 2·P·R / (P + R)</code>. A harmonic mean punishes imbalance: P = 1.0 and R = 0.1 gives F1 = 0.18, not 0.55. You can't game it by being extreme in one direction.</p>
+<p>The general version is <b>F-beta</b>: <code>Fβ = (1 + β²)·P·R / (β²·P + R)</code>. β (beta) sets how much you care about recall relative to precision. β = 1 treats them equally. β = 2 favours recall. <b>β = 0.5 favours precision.</b></p>
+
+<div class="term"><h4>F0.5 = 1.25 × P × R / (0.25 × P + R)</h4><dl>
+<dt>Where 1.25 and 0.25 come from</dt><dd>β = 0.5, so β² = 0.25 and 1 + β² = 1.25. Plug into the F-beta formula.</dd>
+<dt>Meaning</dt><dd>Precision counts about twice as much as recall. A wrong merge hurts more than a missed link.</dd>
+<dt>Why Amazon chose it</dt><dd>In the real world, merging two different businesses is worse than missing a duplicate. A wrong merge might send one seller's payments to another, or mix a fraudster's records into an honest business. A missed duplicate just leaves an extra listing.</dd></dl></div>
+
+<h3>Amazon's worked example</h3>
+<p>We predict S1-00001 → [S2-00047, S2-00193, S3-00812]. Truth is [S2-00047, S3-00812].</p>
+<ul>
+<li>TP = 2 (S2-00047, S3-00812), FP = 1 (S2-00193), FN = 0.</li>
+<li>Precision = 2/3 = 0.667. Recall = 2/2 = 1.0.</li>
+<li>F0.5 = 1.25 × 0.667 × 1.0 / (0.25 × 0.667 + 1.0) = 0.833 / 1.167 = <b>0.714</b>.</li>
+</ul>
+<p>One wrong extra link out of three dropped this business from 1.0 to 0.714.</p>
+
+<h3>Macro average: how the final score is built</h3>
+<div class="term"><h4>Macro-averaged F0.5</h4><dl>
+<dt>What it is</dt><dd>Compute F0.5 separately for <b>each S1 business</b>, then take the plain average across all S1 businesses. Every business counts equally, whether it has 1 match or 11.</dd>
+<dt>The other option (micro)</dt><dd>Pool all TPs/FPs/FNs across all businesses into one big count, then compute once. There, businesses with many matches dominate. Amazon uses macro, not micro.</dd>
+<dt>Consequence</dt><dd>A business with 1 true match where we add 1 wrong link drops to P = 0.5, F0.5 = 0.556. The same wrong link on a business with 10 true matches barely moves its score. Small-group businesses are fragile.</dd></dl></div>
+
+<div class="term"><h4>Singleton scoring rule</h4><dl>
+<dt>Rule</dt><dd>If a business has no true match: empty prediction = <b>1.0</b>; any prediction = <b>0.0</b>.</dd>
+<dt>Why it's special</dt><dd>Normally precision/recall are undefined when there's nothing to find, so Amazon fixed the rule. One wrong link on a singleton wipes out that business completely.</dd></dl></div>
+
+<h3>Try it yourself</h3>
+<p>Type numbers for one S1 business. This uses the exact formula above.</p>
+<div class="calc" id="calc">
+  <div class="row">
+    <label for="c-true">True matches that exist<input id="c-true" type="number" min="0" value="4"></label>
+    <label for="c-tp">We found correctly (TP)<input id="c-tp" type="number" min="0" value="3"></label>
+    <label for="c-fp">We added wrongly (FP)<input id="c-fp" type="number" min="0" value="0"></label>
+  </div>
+  <div class="out" aria-live="polite">
+    <div><small>Precision</small><strong id="o-p">1.000</strong></div>
+    <div><small>Recall</small><strong id="o-r">0.750</strong></div>
+    <div><small>F0.5 for this business</small><strong id="o-f">0.938</strong></div>
+  </div>
+  <div id="o-msg" style="font-size:15px;color:var(--muted)"></div>
+</div>
+
+<h3>The key lesson: one wrong link ≈ half the matches missed</h3>
+<p>A business with 4 true matches:</p>
+<div class="tbl"><table>
+<tr><th>What we predicted</th><th class="n">P</th><th class="n">R</th><th class="n">F0.5</th></tr>
+<tr><td>All 4 correct, nothing wrong</td><td class="n">1.00</td><td class="n">1.00</td><td class="n"><b>1.000</b></td></tr>
+<tr><td>3 correct, missed 1 <span class="pill p-miss">cautious</span></td><td class="n">1.00</td><td class="n">0.75</td><td class="n"><b>0.938</b></td></tr>
+<tr><td>2 correct, missed 2</td><td class="n">1.00</td><td class="n">0.50</td><td class="n">0.833</td></tr>
+<tr><td>All 4 correct + 1 wrong <span class="pill p-bad">greedy</span></td><td class="n">0.80</td><td class="n">1.00</td><td class="n">0.833</td></tr>
+<tr><td>All 4 correct + 2 wrong</td><td class="n">0.67</td><td class="n">1.00</td><td class="n">0.714</td></tr>
+</table></div>
+<p>Adding one wrong link costs as much as missing half the true matches. When unsure about a pair, leaving it out is usually cheaper. But not always: if we're, say, 90% sure, including it is worth it. Our pipeline does this calculation for each business instead of using one fixed rule (section 8, step 6).</p>
+
+<!-- ================================================================ -->
+<h2 id="call">6. Our precision call</h2>
+<p>Early on, the team goal was stated as <b>"99.99% precision"</b>. We looked at it with the numbers and changed the goal to <b>"maximise F0.5"</b>. Here's the reasoning, because people will ask.</p>
+
+<h3>The argument for 99.99% precision</h3>
+<p>F0.5 rewards precision twice as much as recall, so why not make precision nearly perfect? Only output links we're certain about.</p>
+
+<h3>Why we didn't make it the target</h3>
+<ol>
+<li><b>We're scored on F0.5, not precision.</b> Precision is easy to raise: predict less. Predict only one super-safe link per business and precision is near perfect, but recall collapses. With 3.46 true matches per business on average, finding 1 gives R ≈ 0.29 and F0.5 ≈ 0.67. Terrible score, great precision.</li>
+<li><b>The math of 99.99%.</b> The test has roughly 6 million true links. 99.99% precision allows at most about 600 wrong links in the entire file. The data has true matches that look impossible (random-word names at the right address, "Family Association" vs "Family Service"), and decoys that look perfect (same name, different address, 27% of unmatched rows). Getting under 600 mistakes means refusing thousands of real matches.</li>
+<li><b>Only 5.6% singletons.</b> 94% of businesses have matches we must find. Being timid loses recall on almost every business.</li>
+</ol>
+
+<div class="key"><b>Our decision:</b> target the actual metric, macro F0.5. Precision stays very high because F0.5 naturally pushes it there, but we let the math decide each borderline pair instead of a blanket "only if certain" rule. Realistic finish in our plan: 0.985–0.99 on validation. Our current validation is 0.9816 on a regional slice.</div>
+
+<h3>How that decision shows up in the code</h3>
+<ul>
+<li>The <b>threshold</b> is not hand-picked. We try many and keep the one with the best F0.5 on the validation split.</li>
+<li>We also try <b>expected-F0.5 set choice</b>: for each business, pick the set of candidates that maximises the expected F0.5 given the model's probabilities. On validation we keep whichever of the two scores higher.</li>
+<li>The <b>one-owner rule</b> removes wrong links for free: if a pool row is claimed by two S1 businesses, we give it only to the more likely one. That raises precision without losing true matches (since the truth never has two owners).</li>
+</ul>
+
+<!-- ================================================================ -->
+<h2 id="why-hard">7. Why this is hard</h2>
+<p><b>Size.</b> The naive approach compares every S1 business with every pool row. Test: 1.73 million × 10 million ≈ <b>17 trillion pairs</b>. At a million comparisons per second, that's over 200 days. We have hours. So we must avoid comparing most pairs at all (blocking, next section).</p>
+<p><b>Memory.</b> Our laptops have 16 GB of RAM. RAM is the computer's short-term working memory; if a program needs more than exists, it crashes ("out of memory"). 10 million rows with cleaned text and features don't fit comfortably at once, so we process country by country and write results as we go.</p>
+<p><b>No French training data.</b> France is 15% of the test and 0% of train. The model has never seen "R. de la Paix" or "SARL". We handle French abbreviations with hand-written rules.</p>
+<p><b>Look-alikes.</b> Same name, different address; same address, different business (a building full of offices).</p>
+
+<!-- ================================================================ -->
+<h2 id="strategy">8. Our strategy, step by step</h2>
+<p>This is the standard shape of an ER system, and ours follows it: <b>clean → find candidates → describe each pair with numbers → model scores each pair → decide → write files</b>.</p>
+
+<div class="flow">
+  <div class="step"><div class="num">1</div><div><b>Clean the text</b><small>Make the same business look the same.</small></div></div>
+  <div class="arrow">↓ 10M clean pool rows</div>
+  <div class="step"><div class="num">2</div><div><b>Blocking: find candidates</b><small>For each S1 business, fetch a short list of plausible pool rows.</small></div></div>
+  <div class="arrow">↓ ~tens of candidates per S1 instead of 10 million</div>
+  <div class="step"><div class="num">3</div><div><b>Features: describe each pair</b><small>~70 numbers per pair: name similarity, same house number, etc.</small></div></div>
+  <div class="arrow">↓</div>
+  <div class="step"><div class="num">4</div><div><b>Stage 1 model (LightGBM)</b><small>Scores every pair from 0 to 1.</small></div></div>
+  <div class="arrow">↓ optional, GPU only</div>
+  <div class="step"><div class="num">5</div><div><b>Cross-encoder, then Stage 2 model</b><small>Rescores unsure pairs using context: what else competes for this row.</small></div></div>
+  <div class="arrow">↓ probability per pair</div>
+  <div class="step"><div class="num">6</div><div><b>Decide</b><small>One-owner rule + threshold or expected-F0.5 set choice, picked on validation.</small></div></div>
+  <div class="arrow">↓</div>
+  <div class="step"><div class="num">7</div><div><b>Write and check files</b><small>matching_results.tsv + candidate_pairs.tsv, validator prints PASS.</small></div></div>
+</div>
+<p>The code for all of this is <code>colab/er_v2.py</code> in <code>Projects\amazon_er</code> (GitHub: techi101/amazon-ml-er). Versions for Colab, Kaggle and local Jupyter are generated from it.</p>
+
+<h3>Step 1 · Cleaning (normalisation)</h3>
+<div class="term"><h4>Normalisation</h4><dl>
+<dt>What it is</dt><dd>Rewriting text into one standard form so that surface differences disappear.</dd>
+<dt>Analogy</dt><dd>Before comparing two handwritten addresses, you'd copy both in neat capitals with the same abbreviations.</dd>
+<dt>What breaks without it</dt><dd>"PRIME MONEY LLC" and "prime money" look different to a computer. Every later step gets worse.</dd></dl></div>
+<p>What our cleaner does, with examples:</p>
+<div class="tbl"><table>
+<tr><th>Operation</th><th>Before</th><th>After</th></tr>
+<tr><td>Lowercase, remove accents</td><td>CAFÉ Étoile</td><td>cafe etoile</td></tr>
+<tr><td>Strip junk prefixes</td><td>-- Holloway Peak Inc</td><td>holloway peak inc</td></tr>
+<tr><td>Undo leetspeak</td><td>5ervices, lndia</td><td>services, india</td></tr>
+<tr><td>Transliterate Indian scripts</td><td>राम मार्केटिंग</td><td>ram marketing</td></tr>
+<tr><td>Split aliases, keep both halves</td><td>Korwexnyla trading as Gold Consulting</td><td>main: gold consulting · alias: korwexnyla</td></tr>
+<tr><td>Split website names</td><td>wilfordhancock.com</td><td>wilford hancock</td></tr>
+<tr><td>Separate legal form</td><td>Prime Money LLC / Pvt Ltd / SARL</td><td>prime money + legal=llc</td></tr>
+<tr><td>Standard street words</td><td>Rd, R., Av., Bd</td><td>road, rue, avenue, boulevard</td></tr>
+<tr><td>Standard states</td><td>NC / North Carolina / ಕರ್ನಾಟಕ</td><td>nc / nc / karnataka</td></tr>
+<tr><td>House numbers</td><td>011265</td><td>11265</td></tr>
+</table></div>
+<p>The transliteration uses a rule table plus a 156-entry dictionary we learned from training pairs (where a Hindi name and its English version are known to match). When a state is missing, we infer it from city words learned from S1 addresses; that filled 116k India rows (India rows with no state went from 9.0% to 3.2%).</p>
+
+<h3>Step 2 · Blocking (candidate generation)</h3>
+<div class="term"><h4>Blocking</h4><dl>
+<dt>What it is</dt><dd>A cheap, fast filter that, for each S1 business, pulls out only the pool rows that share something with it. Only those get compared carefully.</dd>
+<dt>Analogy</dt><dd>Looking for your friend in a stadium. You don't check all 50,000 faces. You go to the section printed on their ticket, then check the 200 people there.</dd>
+<dt>Why it exists</dt><dd>17 trillion pairs is impossible (section 7). Blocking brings it to tens of candidates per business.</dd>
+<dt>The danger</dt><dd>If blocking misses a true match, no model can ever recover it. The share of true matches that survive blocking is the <b>ceiling</b> on our recall.</dd></dl></div>
+
+<p>We build <b>14 kinds of lookup keys</b> per country, and a pool row becomes a candidate if it shares any key with the S1 business:</p>
+<ul>
+<li>the whole cleaned name (and the alias half on its own);</li>
+<li>rare single name words, typo-tolerant ("holloway" is rare and useful; "services" is common and useless);</li>
+<li>house number + a street word ("1795 westchester");</li>
+<li>street name without the number;</li>
+<li>all keys scoped to the state, so "1795 main" in Ohio doesn't pull in "1795 main" in Texas.</li>
+</ul>
+<p>Then we <b>trim</b>: keep the best candidates by quick combined, name-only and address-only scores, so the list stays short.</p>
+
+<div class="term"><h4>Candidate recall (the recall ceiling)</h4><dl>
+<dt>Formula</dt><dd>true matches present in our candidate lists ÷ all true matches.</dd>
+<dt>Our numbers</dt><dd>Regional slice: 98.9%. Full India after 27 Sep fixes: 93.8% (was ~91%). US full: 96.9% (measured before those fixes).</dd>
+<dt>Meaning</dt><dd>On full India, 6.2% of true matches are never shown to the model. This is currently our biggest loss.</dd></dl></div>
+<div class="term"><h4>Reduction ratio</h4><dl>
+<dt>What it is</dt><dd>How much blocking shrank the work: 1 − (candidate pairs ÷ all possible pairs). Ours is above 99.999%. Amazon computes it from our candidate_pairs.tsv.</dd></dl></div>
+
+<h3>Step 3 · Features</h3>
+<div class="term"><h4>Feature</h4><dl>
+<dt>What it is</dt><dd>A number that describes one aspect of the thing being judged. Models can't read text; they read numbers.</dd>
+<dt>Analogy</dt><dd>A doctor doesn't "look at" you; they measure temperature, pulse, blood pressure. Each measurement is a feature.</dd>
+<dt>Here</dt><dd>For each (S1, candidate) pair we compute about 70 numbers.</dd></dl></div>
+<p>Main similarity measures, each explained:</p>
+<ul>
+<li><b>Jaccard similarity</b>: shared words ÷ total distinct words. "prime money" vs "prime money llc" → 2 shared / 3 total = 0.67.</li>
+<li><b>Levenshtein (edit) distance</b>: the fewest single-letter insert/delete/replace steps to turn one string into the other. "holloway" → "haloway" = 2 edits. Catches typos.</li>
+<li><b>TF-IDF cosine</b>: turns each name into a vector where rare words weigh more (TF = how often a word is in this name, IDF = how rare it is across all names). Cosine measures the angle between two vectors: 1 = same direction, 0 = nothing in common. So sharing "holloway" counts much more than sharing "services".</li>
+<li><b>Character n-grams</b>: overlapping letter chunks ("hol","oll","llo"...). Robust to small typos because most chunks survive.</li>
+<li><b>House-number distance</b>: |1795 − 1791| = 4. Small means likely same building.</li>
+<li><b>Same state / city / street</b>: yes-or-no flags.</li>
+<li><b>Alias-half similarity</b>: compare against the alias too.</li>
+<li><b>Competition features</b>: how does this candidate rank against the other candidates for the same S1? Is another S1 claiming this pool row more strongly?</li>
+<li><b>S2↔S3 support</b>: if an S2 row and an S3 row both look like this business and also look like each other, both are more likely right.</li>
+</ul>
+
+<h3>Step 4 · The model: LightGBM</h3>
+<div class="term"><h4>Decision tree</h4><dl>
+<dt>What it is</dt><dd>A flowchart of yes/no questions learned from data. "Is name similarity &gt; 0.8? → Is house number distance &lt; 5? → match probability 0.97."</dd></dl></div>
+<div class="term"><h4>Gradient boosting / LightGBM</h4><dl>
+<dt>What it is</dt><dd>Gradient boosting builds hundreds of small decision trees one after another. Each new tree focuses on the examples the previous trees got wrong. Their answers are added up. LightGBM is Microsoft's fast, free (MIT-licensed) library that does this.</dd>
+<dt>Analogy</dt><dd>A committee where each new member is hired specifically to fix the mistakes the existing members keep making.</dd>
+<dt>Why we chose it</dt><dd>It is the standard winner on table-shaped data (rows of numeric features). It trains in minutes on a laptop CPU, needs no GPU, handles missing values, and is tiny compared with the 8B-parameter limit.</dd>
+<dt>Why not a big language model</dt><dd>Scoring tens of millions of pairs with an LLM would take far too long on our hardware, and LightGBM with good features already reaches ~0.98.</dd></dl></div>
+<p><b>Two stages</b>: Stage 1 is trained on half A of the sampled training businesses and scores every pair. Stage 2 is trained on half B and uses Stage 1's score plus "competition" features. Using different halves stops Stage 2 from trusting Stage 1 scores that are too optimistic on data Stage 1 already saw.</p>
+
+<h3>Step 5 · Optional cross-encoder</h3>
+<div class="term"><h4>Cross-encoder</h4><dl>
+<dt>What it is</dt><dd>A small neural network that reads both records together as one piece of text ("Prime Money, 17560 Ellis Rd [SEP] PRIME MNY, Ellis Road") and outputs how likely they match. It "understands" wording better than word overlap.</dd>
+<dt>Ours</dt><dd>Multilingual MiniLM, 118M parameters, Apache-2.0 licence. Only runs with an NVIDIA GPU, only on unsure pairs. Without a GPU the pipeline skips it; the CPU result (0.9816) is without it.</dd></dl></div>
+
+<h3>Step 6 · Decision</h3>
+<ol>
+<li><b>One-owner rule</b>: each pool row goes to at most one S1 (the one with the highest probability).</li>
+<li><b>Threshold</b> or <b>expected-F0.5 set choice</b>, whichever scored higher on validation.</li>
+</ol>
+<div class="term"><h4>Expected-F0.5 set choice</h4><dl>
+<dt>What it is</dt><dd>For one business, the model gives probabilities, e.g. [0.99, 0.97, 0.80, 0.30]. We test "take top 1", "top 2", "top 3", "top 4", "none", and compute the expected F0.5 of each using those probabilities. Pick the best.</dd>
+<dt>Why better than one threshold</dt><dd>It naturally handles the macro effect: a business with one likely match should be stricter about adding a second; the empty set is considered as a real option, which protects singletons.</dd></dl></div>
+
+<h3>Step 7 · Output and the final zip</h3>
+<pre>&lt;team_name&gt;_submission.zip
+├── output/
+│   ├── matching_results.tsv      (same file uploaded to leaderboard)
+│   └── candidate_pairs.tsv
+├── code/business_entity_resolution/
+│   ├── src/                      all our code
+│   ├── README.md                 how to reproduce: data → blocking → matching → output
+│   └── requirements.txt          pinned library versions
+└── Documentation_template.md     filled in: method, blocking, model, features</pre>
+<p>Our methodology draft is <code>docs/Documentation.md</code>. The test is predicted country by country and written to disk as it goes, so memory stays low (peak ~4 GB for full India on a 16 GB laptop after the 27 Sep fix).</p>
+
+<!-- ================================================================ -->
+<h2 id="rules">9. Rules that can disqualify us</h2>
+<div class="term"><h4>No external data</h4><dl>
+<dt>Rule</dt><dd>No outside databases, APIs, business registries, geocoding, or internet lookups. Only the given data.</dd>
+<dt>API</dt><dd>Application Programming Interface: a way for one program to ask another service for data, e.g. Google Maps' API.</dd>
+<dt>Geocoding</dt><dd>Converting an address to map coordinates (latitude/longitude). It would make address matching easy, which is why it's banned.</dd>
+<dt>We comply</dt><dd>Our transliteration dictionary and state-from-city table are both learned from the training data only.</dd></dl></div>
+<div class="term"><h4>Model licence MIT or Apache-2.0, at most 8 billion parameters</h4><dl>
+<dt>Licence</dt><dd>The legal terms for using software. MIT and Apache-2.0 are "permissive": anyone may use, change and sell with the code. Some models (e.g. certain Llama versions) have custom licences, which would break the rule.</dd>
+<dt>Parameters</dt><dd>The numbers a model learns during training. More parameters = bigger model. 8B is the cap. Our cross-encoder is 118 million; LightGBM is tiny (MIT).</dd></dl></div>
+<div class="term"><h4>Country is an open set</h4><dl>
+<dt>Rule</dt><dd>Don't hard-code only US/India. France rows must be predicted too.</dd>
+<dt>We comply</dt><dd>The test phase runs per country for whatever countries appear. France gets rule-based French street and legal-form handling.</dd></dl></div>
+
+<!-- ================================================================ -->
+<h2 id="status">10. Where we stand now (27 Sep, evening)</h2>
+<div class="tbl"><table>
+<tr><th>Run</th><th class="n">Validation macro F0.5</th><th class="n">Candidate recall</th><th class="n">Ceiling</th></tr>
+<tr><td>v1 (TF-IDF blocking, 2-stage LightGBM)</td><td class="n">0.9763</td><td class="n">0.974</td><td class="n">—</td></tr>
+<tr><td>v2 CPU, no cross-encoder</td><td class="n"><b>0.9816</b><br><small>US 0.984, India 0.976</small></td><td class="n">0.989</td><td class="n">0.996</td></tr>
+</table></div>
+<p>These are on a <b>regional slice</b> (Ohio + Kerala + Gironde, about 9% of test). The slice output files cover only 160k of 1.73M S1 IDs and <b>must never be uploaded</b>: they'd fail validation.</p>
+<div class="term"><h4>"Ceiling"</h4><dl><dt>Meaning</dt><dd>The F0.5 we'd get if the model decided perfectly on the candidates blocking found. 0.996 means blocking alone caps us there on the slice.</dd></dl></div>
+<p><b>Known risks:</b></p>
+<ul>
+<li>France predicts ~2.17 matches per S1 and 18.5% empty lists, vs ~3.3 and 5.6% for US/India. France is probably under-matched (too cautious), since there's no French training data.</li>
+<li>Full-India candidate recall is 93.8%, lower than the slice suggested. That's the biggest remaining loss.</li>
+<li>A score of 0.9988 was reported at leaderboard rank 9 (unconfirmed), so other teams may be higher.</li>
+<li><b>No full-test run had finished</b> as of the last update. The job is getting one complete, PASS-checked matching_results.tsv.</li>
+</ul>
+
+<!-- ================================================================ -->
+<h2 id="tonight">11. Tonight until midnight</h2>
+<div class="note">A full run takes several hours on a 16 GB machine. At 6:45 PM that leaves little room for a second attempt. Priority is <b>one complete file that passes</b>, not a better score.</div>
+<ul class="check">
+<li>Confirm a full v2 run is going (friend's PC, Kaggle CPU kernel <code>techie1011/amazon-er-v2-cpu</code>, or Colab). Pull the latest commit first.</li>
+<li>If it runs out of memory: lower <code>ER_TRAIN_S1</code> (e.g. 120000 → 80000) before changing any code.</li>
+<li>When it ends, check the console says <code>['PASS']</code>, and run Amazon's <code>validate_submission.py</code> too.</li>
+<li>Sanity-check: row count = 1,732,544; some France rows look right by eye.</li>
+<li>Leader uploads <code>matching_results.tsv</code> to the portal; confirm status says SCORED.</li>
+<li>Build the zip: output/ (both TSVs) + code/business_entity_resolution/ (src, README, requirements) + filled Documentation_template.md.</li>
+<li>Leader submits the zip before 12:00 AM. Don't leave it for 11:55: portals slow down near deadlines.</li>
+<li>Never upload the slice outputs from <code>dev/real_subset</code>.</li>
+</ul>
+
+<!-- ================================================================ -->
+<h2 id="qa">12. Questions people will ask us</h2>
+<p>Short spoken answers. Click to open.</p>
+
+<details><summary>What is the problem in one line?</summary><p>Given three lists of business records with no shared ID, for every business in the clean reference list, find all the rows in the other two lists that are the same business.</p></details>
+<details><summary>Why is Source 1 special?</summary><p>It's deduplicated, so each business appears once. It's the anchor: we answer one row per S1 business. S2 and S3 are the messy pool we search.</p></details>
+<details><summary>What's the metric and why F0.5, not accuracy?</summary><p>Macro-averaged F0.5 per S1 business. Accuracy would be meaningless: almost every pair is a non-match, so saying "no" to everything scores 99.99% accuracy. F0.5 only looks at the links we predict and the links we miss, and weighs wrong links twice as heavily, because a false merge is worse than a missed duplicate.</p></details>
+<details><summary>Explain precision and recall with an example.</summary><p>A business truly has 2 matches. We predict 3 rows, 2 correct. Precision is 2 of 3 predictions right, 0.67. Recall is 2 of 2 true matches found, 1.0. F0.5 is 0.714.</p></details>
+<details><summary>Why not just aim for 99.99% precision?</summary><p>We're scored on F0.5, not precision. Predicting less raises precision but kills recall, and 94% of businesses have matches, averaging 3.46 each. 99.99% precision over ~6 million links means under 600 errors, which the ambiguous cases make impossible without throwing away thousands of real matches. So we tune directly for F0.5.</p></details>
+<details><summary>What does macro average change?</summary><p>Every business counts equally. A single wrong link on a business with one true match halves its precision, and on a singleton it drops the score from 1 to 0. So we are extra careful on small groups and treat "predict nothing" as a real option.</p></details>
+<details><summary>What is blocking and why do you need it?</summary><p>A fast filter that picks a short list of plausible candidates per business. Without it we'd compare 1.7 million by 10 million, about 17 trillion pairs. Blocking uses shared keys like rare name words and house number plus street, cutting it to tens of candidates each.</p></details>
+<details><summary>What's the risk of blocking?</summary><p>Any true match it misses is lost forever, so candidate recall is the ceiling on our score. That's why we use 14 kinds of keys, including alias names and address-only keys, and measure recall on validation.</p></details>
+<details><summary>How do you handle Hindi or Tamil names?</summary><p>We transliterate Indian scripts into Latin letters with a rule table plus a dictionary learned from training pairs, then compare. About 10% of pool names are in Indian scripts.</p></details>
+<details><summary>How do you handle France with no training data?</summary><p>Rules for French street abbreviations (R., Av., Bd), legal forms (SARL, SAS, EURL, EI) and accents, and the model uses features like similarity scores that work in any language. We know France looks under-matched and flag it as a risk.</p></details>
+<details><summary>Why LightGBM and not a neural network or LLM?</summary><p>Our input is a table of numeric features, where gradient boosting is the proven best. It trains fast on a CPU and fits the licence rule easily. An LLM on tens of millions of pairs would be too slow, and we already reach about 0.98. We do use a small 118M cross-encoder on unsure pairs when a GPU is available.</p></details>
+<details><summary>What is the one-owner rule?</summary><p>In the training truth, no S2/S3 row belongs to two S1 businesses; 0 of 7.64 million. So if two businesses both claim a row, we give it only to the more likely one. That removes wrong links without losing true ones.</p></details>
+<details><summary>How did you validate?</summary><p>We held out S1 businesses from training (split by business, so no leakage), trained on the rest, and scored the held-out ones with our own F0.5 scorer, same formula as Amazon's. We also check leave-one-country-out to see how the model does on a country it didn't train on, as a proxy for France.</p></details>
+<details><summary>What is data leakage?</summary><p>When information from the answers sneaks into training, so validation looks better than reality. Splitting by row instead of by business would leak, because a business's other matches would be in training.</p></details>
+<details><summary>What's your biggest weakness?</summary><p>Candidate recall on full India: 93.8%, so about 6% of true matches never reach the model. And France is probably too cautious.</p></details>
+<details><summary>What does candidate_pairs.tsv do if it isn't scored?</summary><p>Amazon uses it to audit blocking quality: recall ceiling and reduction ratio, and to verify our matches really came from our pipeline. Every matched ID must be in it.</p></details>
+<details><summary>What would you do with more time?</summary><p>Raise India candidate recall (more alias and address keys), calibrate France using leave-one-country-out, train on more S1 businesses with more RAM, and run the cross-encoder on a GPU.</p></details>
+<details><summary>How much of this did you write yourself?</summary><p>Be honest: we designed the approach and directed AI tools to write and debug the code, then checked every result on real data ourselves. Then explain any step above in your own words; that is what proves understanding.</p></details>
+
+<!-- ================================================================ -->
+<h2 id="glossary">13. Glossary</h2>
+<dl class="glossary">
+<dt>Entity resolution</dt><dd>Deciding which records are the same real-world thing.</dd>
+<dt>Entity</dt><dd>The real thing a record describes; here, a business.</dd>
+<dt>Record / row</dt><dd>One line of a table.</dd>
+<dt>Field / column</dt><dd>One property of each record (name, address, country).</dd>
+<dt>Source 1/2/3</dt><dd>The three input lists. S1 is the clean reference.</dd>
+<dt>Deduplicated</dt><dd>Contains no repeats of the same entity.</dd>
+<dt>Pool</dt><dd>All S2 + S3 rows we search through.</dd>
+<dt>TSV</dt><dd>Text table with tab-separated columns.</dd>
+<dt>Training set</dt><dd>Data with answers, used to learn.</dd>
+<dt>Test set</dt><dd>Data with hidden answers, used to score us.</dd>
+<dt>Ground truth / label</dt><dd>The correct answer.</dd>
+<dt>Validation split</dt><dd>Training data we hide from our model to score ourselves.</dd>
+<dt>Leakage</dt><dd>Answers sneaking into training, inflating scores.</dd>
+<dt>Overfitting</dt><dd>Memorising training data instead of learning rules.</dd>
+<dt>Singleton</dt><dd>S1 business with no match.</dd>
+<dt>TP / FP / FN / TN</dt><dd>Correct link / wrong link / missed link / correctly ignored.</dd>
+<dt>Confusion matrix</dt><dd>The 2×2 table of those four outcomes.</dd>
+<dt>Precision</dt><dd>TP ÷ (TP + FP): how often our "yes" is right.</dd>
+<dt>Recall</dt><dd>TP ÷ (TP + FN): how many true matches we found.</dd>
+<dt>F1</dt><dd>Harmonic mean of precision and recall, equal weight.</dd>
+<dt>F-beta</dt><dd>F-score where β sets recall's weight.</dd>
+<dt>F0.5</dt><dd>1.25·P·R ÷ (0.25·P + R); precision weighs ~2×.</dd>
+<dt>Macro average</dt><dd>Score each S1 separately, then average.</dd>
+<dt>Micro average</dt><dd>Pool all counts, score once.</dd>
+<dt>Threshold</dt><dd>Probability cut-off above which we say "match".</dd>
+<dt>Normalisation</dt><dd>Rewriting text into one standard form.</dd>
+<dt>Transliteration</dt><dd>Writing a word in another script by sound.</dd>
+<dt>Leetspeak</dt><dd>Letters replaced by look-alike digits (5 for S).</dd>
+<dt>Alias / DBA</dt><dd>A second trading name ("doing business as").</dd>
+<dt>Legal form</dt><dd>LLC, Inc, Pvt Ltd, SARL: company type suffix.</dd>
+<dt>Blocking</dt><dd>Cheap filter picking plausible candidates.</dd>
+<dt>Candidate</dt><dd>A pool row that passed blocking for an S1.</dd>
+<dt>Candidate recall</dt><dd>Share of true matches that survive blocking.</dd>
+<dt>Recall ceiling</dt><dd>Best possible recall given the candidates.</dd>
+<dt>Reduction ratio</dt><dd>How much blocking shrank the comparisons.</dd>
+<dt>Feature</dt><dd>A number describing one aspect of a pair.</dd>
+<dt>Jaccard</dt><dd>Shared words ÷ all distinct words.</dd>
+<dt>Levenshtein distance</dt><dd>Fewest letter edits between two strings.</dd>
+<dt>TF-IDF</dt><dd>Word weighting where rare words count more.</dd>
+<dt>Cosine similarity</dt><dd>Angle-based similarity of two vectors, 0 to 1.</dd>
+<dt>n-gram</dt><dd>Chunk of n consecutive characters or words.</dd>
+<dt>Decision tree</dt><dd>Learned flowchart of yes/no questions.</dd>
+<dt>Gradient boosting</dt><dd>Many small trees, each fixing previous mistakes.</dd>
+<dt>LightGBM</dt><dd>Microsoft's fast gradient-boosting library (MIT).</dd>
+<dt>Cross-encoder</dt><dd>Neural model reading both records together.</dd>
+<dt>Parameters</dt><dd>The learned numbers inside a model.</dd>
+<dt>Licence (MIT/Apache)</dt><dd>Permissive legal terms for using software.</dd>
+<dt>One-owner rule</dt><dd>Each pool row belongs to at most one S1.</dd>
+<dt>Expected-F0.5 set choice</dt><dd>Pick the candidate set with best expected score.</dd>
+<dt>API</dt><dd>A way for programs to request data from a service.</dd>
+<dt>Geocoding</dt><dd>Address → coordinates. Banned here.</dd>
+<dt>RAM</dt><dd>The computer's working memory; run out and the program crashes.</dd>
+<dt>GPU</dt><dd>Graphics chip that speeds up neural networks.</dd>
+<dt>Public / private leaderboard</dt><dd>Live ranking on part of test / final ranking on the rest.</dd>
+<dt>Validator</dt><dd>Script that checks file format and prints PASS.</dd>
+<dt>Hackathon</dt><dd>Timed build contest.</dd>
+<dt>Unstop</dt><dd>Website hosting the challenge.</dd>
+</dl>
+
+<!-- ================================================================ -->
+<h2 id="test">14. Self-test</h2>
+<p>Answer out loud, then open to check.</p>
+<details><summary>1. A singleton, we predict one row. Score?</summary><p>0.0. Any prediction on a singleton scores zero.</p></details>
+<details><summary>2. 5 true matches, we find 5 and add 0 wrong. Then we add 1 wrong. New F0.5?</summary><p>P = 5/6 = 0.833, R = 1. F0.5 = 1.25×0.833 / (0.208+1) = 0.862.</p></details>
+<details><summary>3. Why is candidate recall called a ceiling?</summary><p>The model only sees candidates. A true match blocking missed can never be predicted, so recall can't exceed candidate recall.</p></details>
+<details><summary>4. What does β = 0.5 mean in words?</summary><p>Precision matters about twice as much as recall.</p></details>
+<details><summary>5. Why TSV not CSV?</summary><p>Addresses and ID lists contain commas; tabs never appear in the text.</p></details>
+<details><summary>6. Two S1s both claim pool row S2-123 with probabilities 0.9 and 0.6. What do we do?</summary><p>One-owner rule: give it to the 0.9 business only.</p></details>
+<details><summary>7. How many pairs without blocking on test?</summary><p>About 1.73M × 10M ≈ 17 trillion.</p></details>
+<details><summary>8. Name three noise types and how we fix each.</summary><p>Leetspeak → digit-to-letter undo; Indian scripts → transliteration; Rd/Road → standard street words. (Also: aliases split, legal forms separated, leading zeros stripped.)</p></details>
+<details><summary>9. Why don't we tune on the public leaderboard?</summary><p>It's only part of the test. Chasing it risks overfitting that slice; final ranks come from the private board.</p></details>
+<details><summary>10. What's the file that is actually scored, and what must it print before upload?</summary><p>matching_results.tsv, and the validator must print PASS.</p></details>
+
+<footer>Built 27 Sep 2026 from our problem statement, CONTEXT.md, analysis/PLAN.md and the real dataset. Numbers are from our own runs; the leaderboard figure is unconfirmed.</footer>
+</div>
+
+<script>
+(function(){
+  var t=document.getElementById('c-true'),tp=document.getElementById('c-tp'),fp=document.getElementById('c-fp');
+  var oP=document.getElementById('o-p'),oR=document.getElementById('o-r'),oF=document.getElementById('o-f'),oM=document.getElementById('o-msg');
+  function n(el){var v=parseInt(el.value,10);return isNaN(v)||v<0?0:v;}
+  function run(){
+    var T=n(t),TP=n(tp),FP=n(fp);
+    if(TP>T){TP=T;}
+    var p,r,f,msg='';
+    if(T===0){
+      f=(TP+FP)===0?1:0; p=(TP+FP)===0?1:0; r=1;
+      msg='Singleton: empty prediction scores 1.0, anything else scores 0.0.';
+      oP.textContent='—';oR.textContent='—';oF.textContent=f.toFixed(3);oM.textContent=msg;return;
+    }
+    p=(TP+FP)===0?0:TP/(TP+FP); r=TP/T;
+    f=(p===0&&r===0)?0:1.25*p*r/(0.25*p+r);
+    if((TP+FP)===0){msg='Predicting nothing for a business that has matches scores 0.';}
+    else if(n(tp)>T){msg='TP capped at the number of true matches.';}
+    oP.textContent=p.toFixed(3);oR.textContent=r.toFixed(3);oF.textContent=f.toFixed(3);oM.textContent=msg;
+  }
+  [t,tp,fp].forEach(function(el){el.addEventListener('input',run);});
+  run();
+})();
+</script>
+
+</html>
