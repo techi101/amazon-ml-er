@@ -1,0 +1,121 @@
+﻿DATA_DIR = C:\Users\Lenovo\Downloads\dataset
+[     54s] transliteration dictionary: 669 entries from 71575 native-script pairs | RAM 0.6 GB
+[('praaivet', 'private'), ('praivet', 'private'), ('praa', 'pvt'), ('li', 'ltd'), ('limitet', 'limited'), ('praaibhet', 'private'), ('piraivet', 'private'), ('tek', 'tech'), ('limirrad', 'limited'), ('elaelapii', 'llp'), ('praivarr', 'private'), ('intaraneshanal', 'international'), ('kanstrakshans', 'constructions'), ('estet', 'estate'), ('kanstrakshan', 'construction'), ('inphraastrakchar', 'infrastructure'), ('prodakts', 'products'), ('kansalting', 'consulting'), ('treding', 'trading'), ('prodyuusar', 'producer'), ('inphotek', 'infotech'), ('maarketing', 'marketing'), ('inphraa', 'infra'), ('sistams', 'systems'), ('miidiyaa', 'media')]
+[    110s]   India: state inferred from address words for 0 S1 records (0.000 still without state) | RAM 2.5 GB
+[    113s]   India: state inferred from address words for 116,394 S2/S3 records (0.032 still without state) | RAM 2.7 GB
+[    145s] building keys | RAM 1.9 GB
+sample 60,000: found 0.9384 | share a key but every shared key capped 0.0402 | share no key at all 0.0213
+  n_key          shared-but-capped on missed links: 0.0135
+  n_skel         shared-but-capped on missed links: 0.0118
+  n_nospace      shared-but-capped on missed links: 0.0094
+  n_rare2        shared-but-capped on missed links: 0.0059
+  n_rare1_num    shared-but-capped on missed links: 0.0005
+  a_num_w1       shared-but-capped on missed links: 0.0004
+  a_num_w2       shared-but-capped on missed links: 0.0004
+  a_w1w2         shared-but-capped on missed links: 0.0016
+  a_w1w2_n       shared-but-capped on missed links: 0.0000
+  n_tok          shared-but-capped on missed links: 0.0330
+  n_tok_skel     shared-but-capped on missed links: 0.0283
+  a_tok          shared-but-capped on missed links: 0.0255
+  a_street       shared-but-capped on missed links: 0.0004
+  a_street_num   shared-but-capped on missed links: 0.0001
+
+=== CAPPED: 12 examples ===
+S1 `Narayan Clinic` | `Khasra No. 277/176, First Floor, Street No.1-A/7 Ram Ghat Colony, Village Wazirabad, Wazirabad, North Delhi, Delhi`
+   core2='narayan clinic' alias='' words='khasra first st ram ghat col wazirabad wazirabad _n delhi' n1='1' st='dl'
+T  `Narayan Center` | ``
+   core2='narayan' alias='' words='' n1='' st=''
+S1 `Golden Consultants Limited` | `410 B-08, Gditl Tower, Netaji Subhash Place, Pitampura, Delhi, North West, Delhi`
+   core2='golden consultants' alias='' words='gditl tower netaji subhash pl pitampura _n _w delhi' n1='410' st='dl'
+T  `Golden Cnstlfants Cnstlfants Limited` | ``
+   core2='golden cnstlfants' alias='' words='' n1='' st=''
+S1 `Premier Builders` | `H-3803, Classic Residency B-Block First Floor, Rajnagara Extn, Ghaziabad, Uttar Pradesh`
+   core2='premier builders' alias='' words='classic residency block first rajnagara ext ghaziabad' n1='3803' st='up'
+T  `Premier Búilders` | ``
+   core2='premier builders' alias='' words='' n1='' st=''
+S1 `Red Institute of Technology` | `Dhan Vaibhav Chs. Ltd., Jambli Galli, Factory Lane, Borivali (W)., Maharashtra, Mumbai, Mumbai City, B-2/304`
+   core2='red institute technology' alias='' words='dhan vaibhav chs ltd jambli galli factory ln borivali _w mumbai mumbai' n1='2' st='mh'
+T  `Red Inmthute of Technology` | `Door No 449- B-2/304, Mumbai, Mumbai City, MH`
+   core2='red inmthute technology' alias='' words='mumbai mumbai' n1='449' st='mh'
+S1 `Prime Agro Private Limited` | `23/E, 9 Akar Kothari Compound, Chitalsar, Manpada, Thane, Maharashtra`
+   core2='prime agro' alias='' words='_e akar kothari compound chitalsar manpada thane' n1='23' st='mh'
+T  `Private Prime Aghbro Limited` | `Thane, MH, 0023/E, Manpada`
+   core2='prime aghbro' alias='' words='thane _e manpada' n1='23' st='mh'
+S1 `Pioneer Agro Pvt Ltd` | `New No.9, Old No.4, Basement, 12Th Cross St., Shastri Nagar, Adyar, Chennai, Tamil Nadu`
+   core2='pioneer agro' alias='' words='new old basement cross st shastri ngr adyar chennai' n1='12' st='tn'
+T  `Mr Pioneer AGRO PVT LTD` | ``
+   core2='pioneer agro' alias='' words='' n1='' st=''
+S1 `Hari Impex Private Limited` | `C/O Veeresh Singh, Shahjahanpur, Uttar Pradesh, Shahjahanpur, Mohalla- Sadar Town Khudaganj`
+   core2='hari impex' alias='' words='veeresh singh shahjahanpur shahjahanpur mohalla sadar khudaganj' n1='' st='up'
+T  `Hari Impex` | ``
+   core2='hari impex' alias='' words='' n1='' st=''
+S1 `Sun Steels Private Limited` | `Shop No 06, Sr No 207/2/1, Muktai Hights, Bhosari, Pune City, Pune, Maharashtra`
+   core2='sun steels' alias='' words='sr muktai hights bhosari pune pune' n1='6' st='mh'
+T  `Sun Private Limited Center` | `#06, Pune, MH`
+   core2='sun' alias='' words='pune' n1='6' st='mh'
+S1 `International Impex Private Limited` | `Flatno.601, 6Thfloor, Anand11Throad, Opp.Santacruzgymkhana, Santacruz(E), Mumbai, Maharashtra`
+   core2='impex' alias='' words='flatno thfloor anand throad opp santacruzgymkhana santacruz _e mumbai' n1='6' st='mh'
+T  `Smt International Impex` | `Door No 01, Santacruz(e), Mumbai, MH`
+   core2='impex' alias='' words='santacruz _e mumbai' n1='1' st='mh'
+S1 `Southern Premier Investments LLP` | `B-1/75 Janak Puri, New Delhi, West Delhi, Delhi`
+   core2='southern premier investments' alias='' words='janak puri new delhi _w delhi' n1='1' st='dl'
+T  `Southern Primciber Investments LLP` | `Hn 700 B-1/75 Janak Puri, West Delhi, Delhi, DL`
+   core2='southern primciber investments' alias='' words='hn janak puri _w delhi dl' n1='700' st='dl'
+S1 `Sun Business Pvt Ltd` | `01St Ward, C/O. Adi Babu, 02Nd Cross, Ambedkar Nagar, Talur Road, Bellary, Karnataka`
+   core2='sun business' alias='' words='ward adi babu cross ambedkar ngr talur rd karnataka' n1='1' st='br'
+T  `Sun ಬಿಸಿನೆಸ್ ಪ್ರೈವೇಟ್ ಲಿಮಿಟೆಡ್` | ``
+   core2='sun business' alias='' words='' n1='' st=''
+S1 `Silver Technologies` | `3178, Kucha Tara Chand Darya Ganj, Delhi, New Delhi, Delhi`
+   core2='silver technologies' alias='' words='kucha tara chand darya ganj new delhi delhi' n1='3178' st='dl'
+T  `Silver Technologies` | ``
+   core2='silver technologies' alias='' words='' n1='' st=''
+
+=== NO SHARED KEY: 12 examples ===
+S1 `Link Educational Society` | `Vasuda Apartment F No.101, Pno.30 Bhagyanagar Colony, Tirumalagiri, Hyderabad, Telangana`
+   core2='link educational' alias='' words='vasuda apt pno bhagyanagar col tirumalagiri hyderabad' n1='30' st='tg'
+T  `Link Educational Society Company` | `VASUDA APARTMENT F NO.101, PNO.30 BHAGYANAGAR COLONY, TIRUMALAGIRI, Andhra Pradesh`
+   core2='link educational' alias='' words='vasuda apt pno bhagyanagar col tirumalagiri' n1='30' st='ap'
+S1 `Balaji Construction` | `Bangalore, Bangalore North, Prestige Woodside, Avalahalli, Karnataka, Unit 82`
+   core2='balaji construction' alias='' words='bangalore bangalore _n prestige woodside karnataka' n1='82' st='hi'
+T  `ಬಾಲಾಜಿ ಕನ್‌ಸ್ಟ್ರಕ್ಷನ್` | `DOOR NO 536 UNIT 82, Karnataka, BANGALORE NORTH, BANGALORE`
+   core2='balaji construction' alias='' words='bangalore _n bangalore' n1='536' st='ka'
+S1 `OP Carbon Private Limited` | `H No 2-1-238, Plot No 49, Mamatha Nagar, Nagole, Hayathnagar, Hyderabad, Telangana`
+   core2='op carbon' alias='' words='mamatha ngr nagole hayathnagar hyderabad' n1='2' st='tg'
+T  `OP Carbon  Private Limited` | `H No 1-1-238, Hayathnagar, Hyderabad, Andhra Pradesh`
+   core2='op carbon' alias='' words='hayathnagar hyderabad' n1='1' st='ap'
+S1 `Midas Alloy Pvt. Ltd.` | `Sy6 Mr Prime, Bp Raju Marg, Whitefield Serilingampaly, Serilingampally, K.V.Rangareddy, Telangana`
+   core2='midas alloy' alias='' words='sy mr prime bp raju mg whitefield serilingampaly serilingampally rangareddy' n1='6' st='tg'
+T  `M/s Midas Alo Pvt. Ltd.` | `Sy##6 Mr Prime, Serilingampally, K.v.rangareddy, Andhra Pradesh`
+   core2='midas alo' alias='' words='sy mr prime serilingampally rangareddy' n1='6' st='ap'
+S1 `Vrp Seva Samiti` | `405, Velocity Business Hub, Near Madhuvan Circul L P Savani, Adajan, Surat, Gujarat`
+   core2='vrp seva samiti' alias='' words='velocity business hub near madhuvan circul savani adajan gujarat' n1='405' st='pdl'
+T  `Vrp Sebdva  Samiti` | `405, VELOCITY BUSINESS HUB, NEAR MADHUVAN CIRCUL L P SAVANI, ADAJAN, ગુજરાત`
+   core2='vrp sebdva samiti' alias='' words='velocity business hub near madhuvan circul savani adajan' n1='405' st='gj'
+S1 `Raviora Ventures LLP` | `Plot No. 128/129, Opp. Bhatpor Iti, B/H Toyota Showroom, Bhatpore G.I.D.C., Surat, Gujarat`
+   core2='raviora' alias='' words='opp bhatpor iti toyota showroom bhatpore gujarat' n1='128' st='pdl'
+T  `Raviora Ventures LLP` | `PLOT NO. 127/129 , OPP. BHATPOR ITI, B/H TOYOTA SHOWROOM, BHATPORE G.I.D.C., ગુજરાત`
+   core2='raviora' alias='' words='opp bhatpor iti toyota showroom bhatpore' n1='127' st='gj'
+S1 `Shriniwas Engineering Company` | `My Home Navadweepa, Vayu 510, Shaikpet, Telangana, Hyderabad`
+   core2='shriniwas engineering' alias='' words='my home navadweepa vayu shaikpet hyderabad' n1='510' st='tg'
+T  `Shriniwas  Engineering (Company)` | `649 VAYU 510, MY HOME NAVADWEEPA, SHAIKPET, Andhra Pradesh`
+   core2='shriniwas engineering' alias='' words='vayu my home navadweepa shaikpet' n1='649' st='ap'
+S1 `Smruti Crusher LLP` | `Blockno. 125 Plotno.10-11, Behind Tulsi Hotel, Olpad, Surat, Gujarat`
+   core2='smruti crusher' alias='' words='blockno plotno bhd tulsi hotel olpad gujarat' n1='125' st='pdl'
+T  `Smruti LLP Crusher` | `BLOCKNO. 125 PLOTNO.10-11, BEHIND TULSI HOTEL, OLPAD, Gujarat`
+   core2='smruti crusher' alias='' words='blockno plotno bhd tulsi hotel olpad' n1='125' st='gj'
+S1 `Shaikpet Coal Private Limited` | `H No 8-2-293/82/A/231, Road No-36, Metro Pillar No 1608, Jubilee Hills, Co-Op House Society, Shaikpet, Hyderabad, Telangana`
+   core2='shaikpet coal' alias='' words='rd metro pillar jubilee hills co op society shaikpet hyderabad' n1='293' st='tg'
+T  `Private Shaikpet Coal Ltd` | `#8-2-293/82/A/231, ROAD NO-36, METRO PILLAR NO 1608, JUBILEE HILLS, CO-OP HOUSE SOCIETY, Andhra Pradesh, HYDERABAD, SHAIKPET`
+   core2='shaikpet coal' alias='' words='rd metro pillar jubilee hills co op society hyderabad shaikpet' n1='293' st='ap'
+S1 `Alpha Power Private Limited` | `Hyderabad, 3Rd Floor, Gunfoundry, Abids, H.No 5-9-658, Telangana`
+   core2='alpha power' alias='' words='hyderabad gunfoundry abids' n1='3' st='tg'
+T  `Alpha Power-Private Limited` | `H.no 5-9-658, 3Rd Floor, Gunfoundry, Abids, Hyderabad, Andhra Pradesh`
+   core2='alpha power' alias='' words='gunfoundry abids hyderabad' n1='5' st='ap'
+S1 `Nobel Cosmetics` | `Karari, Parai, Ugrasenpur, Baishkanti, Kaushambi, Uttar Pradesh`
+   core2='nobel cosmetics' alias='' words='parai ugrasenpur baishkanti kaushambi uttar pradesh' n1='' st='kl'
+T  `Nobel Cosmetics` | `Kaushambi, UP, Karari, Parai, Ugrasenpur, Baishkanti, Kaushambi`
+   core2='nobel cosmetics' alias='' words='kaushambi karari parai ugrasenpur baishkanti kaushambi' n1='' st='up'
+S1 `Primus Learning Private Limited` | `C/0 Sovran Tajna, Dhelua, Near Mangla Mandir, Rajagangapur, Sundargarh, Orissa`
+   core2='primus learning' alias='' words='sovran tajna near mangla mandir rajagangapur sundargarh orissa' n1='0' st='dl'
+T  `Primus Laing Private Limited` | `C/0 Sovran Tajna, Rajagangapur, Sundargarh, OD`
+   core2='primus laing' alias='' words='sovran tajna rajagangapur sundargarh' n1='0' st='od'

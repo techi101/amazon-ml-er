@@ -134,8 +134,16 @@ Full-data candidate recall (share of true links the candidate step keeps; the sl
 | India (883k S1 × 4.1M targets) | ~91% | 94.0% generated, **93.8% after trimming** |
 | US | 96.9% | not re-measured yet |
 State inference filled 116k targets (India records with no state 9.0% -> 3.2%).
-The other session is diagnosing the remaining ~6% India misses; if a fix lands it will be a new
-commit, so `git pull` before starting a run.
+**v4 (pushed ~19:40, current):** sound-alike state matching only for multi-word names (fixes
+single-word names like "bellary" being read as "bihar"); new keys `n_tokpair` (every pair of
+informative name words) and `a_tok_num` (house number + each address word).
+Full-India candidate recall 93.8% -> **95.0%** kept (95.4% generated). Remaining misses: mostly
+address-less targets with common names, deliberately not matched (precision).
+Slice (70k train / 30k val, no cross-encoder): val macro F0.5 **0.98181** (v3 0.98155), candidate
+recall 0.9927 (v3 0.9894), ceiling 0.99693. Kaggle: techie1011/amazon-er-v4-cpu runs v4.
+
+**Deadline: 12:00 AM 28 Sep IST.** If a run can't finish by ~23:00, submit whatever full,
+PASS-checked file exists.
 
 Known risks / what to look at if you have time:
 - France predicts ~2.17 matches/S1 and ~18.5% empty lists vs 3.3 and 5.6% for US/India;

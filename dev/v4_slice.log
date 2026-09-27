@@ -1,0 +1,70 @@
+DATA_DIR = C:\Users\Lenovo\Projects\amazon_er\dev\real_subset
+[     14s] transliteration dictionary: 156 entries from 21953 native-script pairs | RAM 0.3 GB
+[('limirrad', 'limited'), ('praivarr', 'private'), ('elelpi', 'llp'), ('tek', 'tech'), ('inrarnaashanal', 'international'), ('enrarpraisas', 'enterprises'), ('venchels', 'ventures'), ('indastriis', 'industries'), ('kanstrakshan', 'construction'), ('teknolaji', 'technology'), ('prodakts', 'products'), ('sarviisas', 'services'), ('inphr', 'infra'), ('kansalttanrs', 'consultants'), ('pavar', 'power'), ('inphraastrakchar', 'infrastructure'), ('helttkeyar', 'healthcare'), ('phinaans', 'finance'), ('bildels', 'builders'), ('inpeks', 'impex'), ('maarkkarring', 'marketing'), ('phaunteshan', 'foundation'), ('kansaltting', 'consulting'), ('hospirraalirri', 'hospitality'), ('treding', 'trading')]
+[     23s] half A 35,000, half B 35,000, validation 30,000 S1 records | RAM 0.5 GB
+[     82s]   US: state inferred from address words for 0 S1 records (0.000 still without state) | RAM 1.0 GB
+[     82s]   US: state inferred from address words for 0 S2/S3 records (0.000 still without state) | RAM 1.0 GB
+[     82s]   US: cleaned 85,649 S1 + 386,076 S2/S3 | RAM 1.0 GB
+[    146s]   US: 3,778,614 raw candidate pairs | RAM 1.2 GB
+[    179s]   US: 2,303,029 pairs after pruning (26.9 per S1) | RAM 1.7 GB
+[    255s]   US: 2,031,816 feature rows; validation candidate recall so far 0.9948 | RAM 2.3 GB
+[    284s]   India: state inferred from address words for 0 S1 records (0.000 still without state) | RAM 1.9 GB
+[    284s]   India: state inferred from address words for 32 S2/S3 records (0.000 still without state) | RAM 1.9 GB
+[    284s]   India: cleaned 35,490 S1 + 161,341 S2/S3 | RAM 1.9 GB
+[    312s]   India: 2,037,347 raw candidate pairs | RAM 2.0 GB
+[    329s]   India: 1,042,927 pairs after pruning (29.4 per S1) | RAM 2.3 GB
+[    366s]   India: 921,908 feature rows; validation candidate recall so far 0.9927 | RAM 2.7 GB
+[    367s] feature matrix (2953724, 76); candidate recall on validation 0.9927 | RAM 2.5 GB
+[    427s] stage 1 trained (336 trees) | RAM 2.3 GB
+[    487s] stage 2 trained (241 trees) | RAM 2.5 GB
+p1               78.34
+tg_qs_margin     14.10
+s1_p1_margin      2.54
+tg_qs_rank        2.22
+s1_p1_sum         0.46
+sup_same_src      0.30
+sup_cross_src     0.18
+n_full_ratio      0.15
+s1_qs_rank        0.11
+num_contain       0.10
+s1_ncand          0.09
+tg_qn_margin      0.08
+s1_p1_n50         0.08
+s1_p1_rank        0.08
+num_symdiff       0.07
+s1_qa_rank        0.07
+s1_qs_margin      0.06
+tg_qa_margin      0.06
+s1_qn_rank        0.06
+n_unexpl_t        0.05
+n_ratio           0.05
+a_partial         0.05
+n_tsort           0.04
+qs                0.04
+tg_ncand          0.04
+dtype: float64
+tuning half: {'ef_owner': 0.98345, 'ef_no_owner': 0.9833, 'thr0.7_owner': 0.98318, 'thr0.8_owner': 0.98314, 'thr0.6_owner': 0.98302, 'thr0.8_no_owner': 0.98301}
+chosen rule: ef_owner
+VALIDATION macro F0.5 (untouched half): 0.98181   | ceiling with perfect decisions on our candidates: 0.99693 | candidate recall 0.9927
+  India: 0.97797 on 4,429 S1
+  US: 0.98335 on 10,569 S1
+[    600s]   France: state inferred from address words for 0 S1 records (0.000 still without state) | RAM 1.1 GB
+[    600s]   France: state inferred from address words for 402 S2/S3 records (0.000 still without state) | RAM 1.1 GB
+[    600s]   France: cleaned 85,444 S1 + 308,487 S2/S3 | RAM 1.1 GB
+[    653s]   France: 4,767,952 raw candidate pairs | RAM 1.3 GB
+[    695s]   France: 2,196,121 pairs after pruning (25.7 per S1) | RAM 2.0 GB
+[    889s]   France: 85,444 S1 rows, 2.17 matches per S1, 0.185 empty | RAM 1.4 GB
+[    919s]   US: state inferred from address words for 0 S1 records (0.000 still without state) | RAM 1.3 GB
+[    919s]   US: state inferred from address words for 0 S2/S3 records (0.000 still without state) | RAM 1.3 GB
+[    919s]   US: cleaned 42,529 S1 + 237,249 S2/S3 | RAM 1.3 GB
+[    959s]   US: 2,048,359 raw candidate pairs | RAM 1.3 GB
+[    973s]   US: 1,248,281 pairs after pruning (29.4 per S1) | RAM 1.7 GB
+[   1080s]   US: 42,529 S1 rows, 3.27 matches per S1, 0.058 empty | RAM 1.2 GB
+[   1112s]   India: state inferred from address words for 0 S1 records (0.000 still without state) | RAM 1.1 GB
+[   1112s]   India: state inferred from address words for 54 S2/S3 records (0.000 still without state) | RAM 1.1 GB
+[   1112s]   India: cleaned 32,418 S1 + 184,538 S2/S3 | RAM 1.1 GB
+[   1144s]   India: 2,273,754 raw candidate pairs | RAM 1.2 GB
+[   1161s]   India: 1,109,448 pairs after pruning (34.2 per S1) | RAM 1.6 GB
+[   1262s]   India: 32,418 S1 rows, 3.30 matches per S1, 0.056 empty | RAM 1.3 GB
+[   1262s] wrote 160,391 rows, 431,992 matches -> C:\Users\Lenovo\Projects\amazon_er\dev\real_subset\output_v4/matching_results.tsv | RAM 1.2 GB
+['PASS']

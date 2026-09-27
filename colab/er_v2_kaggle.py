@@ -448,11 +448,11 @@ def _state_of(comp):
     key = " ".join(RE_NONWORD.sub(" ", comp.replace("'", " ")).split())
     if not key or RE_DIGIT.search(key) or key.count(" ") > 6:
         return ""
-    return STATE_LOOKUP.get(key) or STATE_SKEL.get(" ".join(skel(w) for w in key.split()), "")
+    return STATE_LOOKUP.get(key) or (STATE_SKEL.get(" ".join(skel(w) for w in key.split()), "") if " " in key else "")
 
 STATE_SKEL = {}
 for _k, _v in STATE_LOOKUP.items():
-    if len(_k) > 3:
+    if " " in _k:
         STATE_SKEL.setdefault(" ".join(skel(w) for w in _k.split()), _v)
 
 
@@ -623,6 +623,15 @@ def build_keys(F, name_df, addr_df, country, side):
                     rows.append(i)
                     words.append(w)
         add("n_tok", [c + "t" + w for w in words], [True] * len(words), rows)
+        # every pair of informative name words: survives one typo or one inserted word
+        prow, pairs = [], []
+        for i, tl in enumerate(tok):
+            ws = [w for w in tl if len(w) >= 3 and w not in FILLER][:6]
+            for x in range(len(ws)):
+                for y in range(x + 1, len(ws)):
+                    prow.append(i)
+                    pairs.append(ws[x] + " " + ws[y])
+        add("n_tokpair", [c + "p" + w for w in pairs], [True] * len(pairs), prow)
         add("n_tok_skel", [c + "u" + skel(w) for w in words], [len(skel(w)) >= 3 for w in words], rows)
 
     ra = rare_tokens(F.ad_wset.tolist(), addr_df)
@@ -641,6 +650,9 @@ def build_keys(F, name_df, addr_df, country, side):
                 rows.append(i)
                 words.append(w)
     add("a_tok", [c + "x" + w for w in words], [True] * len(words), rows)
+    nrow = [r for r in rows if num1[r]]
+    nwords = [w for r, w in zip(rows, words) if num1[r]]
+    add("a_tok_num", [c + "o" + num1[r] + "|" + w for r, w in zip(nrow, nwords)], [True] * len(nwords), nrow)
     st, stt = F.ad_street.tolist(), F.ad_state.tolist()
     add("a_street", [c + "y" + s + "|" + x for x, s in zip(st, stt)], [bool(x) for x in st])
     add("a_street_num", [c + "z" + s + "|" + x + "|" + m for x, s, m in zip(st, stt, num1)],
@@ -652,7 +664,7 @@ def build_keys(F, name_df, addr_df, country, side):
 KEY_CAPS = {"n_key": (25, 300), "n_skel": (25, 300), "n_nospace": (25, 300), "n_rare2": (25, 300),
             "n_rare1_num": (25, 300), "a_num_w1": (25, 300), "a_num_w2": (25, 300), "a_w1w2": (25, 300),
             "a_w1w2_n": (25, 300), "n_tok": (6, 150), "n_tok_skel": (6, 150), "a_tok": (6, 150),
-            "a_street": (25, 300), "a_street_num": (25, 300)}
+            "a_street": (25, 300), "a_street_num": (25, 300), "n_tokpair": (25, 300), "a_tok_num": (25, 300)}
 KEY_NAMES = list(KEY_CAPS)
 
 
