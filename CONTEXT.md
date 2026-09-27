@@ -11,7 +11,7 @@ and send back `output/matching_results.tsv` (and `output/candidate_pairs.tsv`)**
    ```
    pip install -r requirements.txt
    # NVIDIA GPU (optional, enables the cross-encoder step, better score):
-   pip install torch --index-url https://download.pytorch.org/whl/cu121
+   pip uninstall -y torch; pip install torch --index-url https://download.pytorch.org/whl/cu121
    # (requirements.txt already installs a CPU torch; the line above swaps in the GPU build)
    ```
 2. Get the dataset (NOT in this repo, 2.5 GB). You need a folder laid out as:

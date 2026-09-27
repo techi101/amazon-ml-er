@@ -1,5 +1,5 @@
 # Python 3.11 or 3.12 (pandas 3 needs 3.11+). Install: pip install -r requirements.txt
-# torch: CPU build is fine; for an NVIDIA GPU use: pip install torch --index-url https://download.pytorch.org/whl/cu121
+# torch: CPU build is fine; for an NVIDIA GPU use: pip uninstall -y torch; pip install torch --index-url https://download.pytorch.org/whl/cu121
 pandas==3.0.3
 numpy==2.3.4
 lightgbm==4.7.0
